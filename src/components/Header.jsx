@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
 
 function Header({ bg, p }) {
-  let { user } = useContext(ourcontext);
+  let { user,admin ,sethoste,hoste,hosteluser} = useContext(ourcontext);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -40,7 +40,7 @@ function Header({ bg, p }) {
               className="w-10 h-10 rounded-full border border-white"
             />
           ) : (
-            <p className="text-white font-semibold">{user.email}</p>
+            <p className="text-white font-semibold">{user.email}    {hosteluser&&  "You are a hostler"}  </p>
           )}
         </div>
       )}
@@ -51,14 +51,21 @@ function Header({ bg, p }) {
         <p className="font-bold text-white">Partner with us</p>
         {isAuthenticated && (
           <>
-            <button onClick={() => navigate("/cart")} className="btn bg-orange-500 px-4 py-2">Cart</button>
-            <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 px-4 py-2">Wishlist</button>
+           {!admin&&<>
+           <button onClick={() => navigate("/cart")} className="btn bg-orange-500 px-4 py-2">Cart</button>
+           <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 px-4 py-2">Wishlist</button></>}
             <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
           </>
         )}
         {!isAuthenticated && (
           <Link to="/about" className="btn border-white text-white px-4 py-2">About Us</Link>
         )}
+          {admin&&  <button onClick={() => {
+            navigate("addhostel")
+            sethoste(!hoste)
+            
+          }} className="btn bg-blue-500 px-4 py-2">Add hosteller</button>}
+
       </nav>
 
       {/* Mobile Menu Button */}

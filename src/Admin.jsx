@@ -1,7 +1,7 @@
 import { 
   collection, limit, onSnapshot, orderBy, query, doc, updateDoc 
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { db } from "./Firebase";
 import { 
   Table, TableBody, TableCell, TableContainer, 
@@ -9,8 +9,11 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { ourcontext } from "./main";
 
 function Admin() {
+    let {user,setuser,sethstelusertotalbill,hstelusertotalbill}=useContext(ourcontext)
+  
   const [fetchedarray, setfetchedarray] = useState([]);
   const [expanded, setExpanded] = useState({});
   const [totalbudgey, setTotalbudgey] = useState(0);
@@ -40,6 +43,27 @@ function Admin() {
         el.createdAt = el.createdAt.toLocaleString();
       });
 
+      // let arrro=sortedMessages.reduce((total,orders)=>{
+
+
+      // })
+
+      sortedMessages.forEach(order=>{
+        if (order.hosteluser && !order.done) {
+          let foods = JSON.parse(order.foods);
+          let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+         order.monthlyamnt=orderTotal;
+         sethstelusertotalbill(prev=>{
+          return prev+= order.monthlyamnt
+         })
+
+
+       
+    
+        }
+        return order
+      })
+
       setfetchedarray(sortedMessages);
     });
 
@@ -53,21 +77,41 @@ function Admin() {
     let offlinepay = 0;
 
     fetchedarray.forEach(order => {
+
+     
       let foods = JSON.parse(order.foods);
       let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
       newTotal += orderTotal;
-
-      if (order.paymenttype === "online") {
-        onlinepay += orderTotal;
-      } else {
-        offlinepay += orderTotal;
-      }
+if (order.done) {
+  if (order.paymenttype === "online") {
+    onlinepay += orderTotal;
+  } else {
+    offlinepay += orderTotal;
+  }
+}
+     
     });
 
-    setTotalbudgey(newTotal);
+  
     settotalonlinepayment(onlinepay);
     settotalofflinepayment(offlinepay);
+
+    
+
+
+
+
   }, [fetchedarray]);
+
+  useEffect(() => {
+
+    setTotalbudgey((prev=>{
+
+return prev=totalofflinepayment+totalonlinepayment
+      console.log(prev,"pppprprruyekgfkhwgdfkhnvbdwmnv msc")
+    }))
+  }, [totalofflinepayment,totalonlinepayment])
+  
 
   // Function to update 'done' field in Firestore
   const markAsDone = async (orderId) => {
@@ -106,10 +150,15 @@ function Admin() {
               <TableCell><strong>Payment</strong></TableCell>
               <TableCell><strong>Actions</strong></TableCell>
               <TableCell><strong>Status</strong></TableCell>
+              <TableCell><strong>hosteller</strong></TableCell>
+
             </TableRow>
           </TableHead>
           <TableBody>
             {fetchedarray.map(order => {
+
+             
+       
               let foods = JSON.parse(order.foods);
               const totalPrice = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
 
@@ -121,6 +170,7 @@ function Admin() {
                     <TableCell>{order.createdAt}</TableCell>
                     <TableCell>₹{totalPrice}</TableCell>
                     <TableCell>{order.paymenttype}</TableCell>
+{order.hosteluser && order.monthlyamnt &&<h1> crt pending {hstelusertotalbill}</h1>}
                     <TableCell>
                       <IconButton onClick={() => setExpanded(prev => ({ ...prev, [order.id]: !prev[order.id] }))}>
                         {expanded[order.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -139,6 +189,8 @@ function Admin() {
                         </Button>
                       )}
                     </TableCell>
+
+                    <TableCell><Button sx={{background:order.hosteluser?"green":"red",color:"white"}}>{order.hosteluser?"True":"False"}</Button></TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell colSpan={7} sx={{ padding: 0 }}>

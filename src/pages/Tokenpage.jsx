@@ -1,27 +1,37 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,useState } from "react";
 import html2canvas from "html2canvas";
 import { ourcontext } from "../main";
 import "./Tokenpage.css"; // Import the CSS file
 
 const TokenPage = () => {
   const { token ,settoken} = useContext(ourcontext);
-
+const [loadtoken, setloadtoken] = useState([])
 useEffect(() => {
   
 
-if ( JSON.parse(localStorage.getItem("token"))) {
-    settoken( JSON.parse(localStorage.getItem("token")))
-}
+// if ( JSON.parse(localStorage.getItem("token"))) {
+//     settoken( JSON.parse(localStorage.getItem("token")))
+// }
 
- 
+// console.log(token,"frstokem")
+
+ console.log(token,"tokennn")
 }, [])
 
 
-useEffect(() => {
+// useEffect(() => {
   
 
- console.log(token,"yytttt")
-}, [])
+// //  console.log(token,"yytttt")
+
+
+// }, [token])
+
+// useEffect(() => {
+
+
+// }, [loadtoken])
+
 
   const handleDownload = () => {
     const captureElement = document.getElementById("tokenContainer");
@@ -55,7 +65,7 @@ useEffect(() => {
                 <img src={food.image} alt={food.name} />
                 <div>
                   <p className="food-name">{food.name}</p>
-                  <p className="food-quantity">Qty: {food.quantity>1?food.quantity+1:food.quantity}</p>
+                  <p className="food-quantity">Qty: {token.paymenttype=="online"  &&food.quantity>1?food.quantity:food.quantity}</p>
                 </div>
               </li>
             ))}

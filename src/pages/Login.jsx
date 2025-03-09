@@ -29,12 +29,14 @@ function Login() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // alert("Login successful!");
+        alert("Login successful!");
    setuser(userCredential.user)
+   navigate("/")
+
       })
       .catch((error) => {
         setError(error.message);
-        // alert(error.message);
+        alert(error.message);
       });
   };
 
@@ -80,7 +82,7 @@ function Login() {
         navigate("/"); // Redirect to Home Page
       } else {
         console.log("Invalid credentials"); // Debugging: Invalid login attempt
-        // setError("Invalid email or password");
+        setError("Invalid email or password");
         setLoading(false);
       }
     }, 1000);

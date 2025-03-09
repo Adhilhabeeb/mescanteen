@@ -19,9 +19,13 @@ import ItemDetailPage from "./pages/ItemDetailPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import WishlistPage from "./pages/WishlistPage.jsx";
 import Food from "./food.jsx";
+import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
+
 import { Token } from "@mui/icons-material";
 import TokenPage from "./pages/Tokenpage.jsx";
 import Footer from "./components/Footer.jsx";
+import Addhostelers from "./pages/Addhostelers.jsx";
+import { db } from "./Firebase.js";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -33,6 +37,9 @@ const router = createBrowserRouter(
 
       <Route path="/item/:id" element={<ItemDetailPage />} />
       <Route path="/cart" element={<CartPage />} /> {/* Cart Route */}
+      <Route path="addhostel" element={<Addhostelers />} /> {/* Cart Route */}
+
+      
       <Route path="/wishlist" element={<WishlistPage />} />
       <Route path="*" element={<NotFound />} />
     </Route>
@@ -40,6 +47,20 @@ const router = createBrowserRouter(
 );
 export let ourcontext =createContext()
 function Main(props) {
+  const [hstelusertotalbill, sethstelusertotalbill] = useState(0)
+
+  
+   const [hostelarr, sethostelarr] = useState([])
+
+   useEffect(() => {
+    const q = query(collection(db, "hostelers"), orderBy("timestamp", "desc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      sethostelarr(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    });
+   }, [])
+   
+  const [hoste, sethoste] = useState(false)
+  const [hosteluser, sethosteluser] = useState(false)
 const [token, settoken] = useState(JSON.parse(localStorage.getItem("token")))
 const [admins, setadmins] = useState(["abhinavraj.cse22@mbits.ac.in","adhilhabeeb960571@gmail.com"])
   const [user, setuser] = useState(null)
@@ -48,13 +69,15 @@ const [cart, setcart] = useState([])
   const [items, setitems] = useState(["Biriyani", "Fried Rice", "Noodles", "Grilled Chicken", "Shawarma", "Parotta", "Butter Chicken", "Fish Curry", "Paneer Tikka", "Dosa", "Idli", "Pasta", "Pizza", "Burger", "Sandwich", "Mutton Curry", "Chicken 65", "Ghee Rice", "Kebab", "Mojito"])
  useEffect(() => {
   localStorage.setItem("cart",JSON.stringify(cart))
-console.log(cart,"cartyty")
 
-console.log(localStorage.getItem("cart"))
+
+
+
  }, [cart])
  
  useEffect(() => {
  if (user) {
+
   localStorage.setItem("auth",JSON.stringify(user))
   
  }
@@ -69,6 +92,24 @@ console.log(localStorage.getItem("cart"))
  }, [user])
  
  useEffect(() => {
+  if (user && hostelarr.length>0) {
+    let hoste=hostelarr.some(el=>{
+      return el.email===user.email
+      })
+
+    
+
+
+     sethosteluser(hoste)
+
+
+
+
+
+     }
+ }, [user,hostelarr])
+ 
+ useEffect(() => {
   
 
   let authuser=JSON.parse(localStorage.getItem("auth"))
@@ -79,7 +120,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token}}>
+    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill}}>
 
 {props.children}
 

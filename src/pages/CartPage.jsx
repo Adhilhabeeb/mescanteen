@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
+
 import { db } from "../Firebase";
-import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, query, serverTimestamp ,orderBy,limit,onSnapshot} from "firebase/firestore";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import { Box, Container, Grid, Typography, Link, IconButton } from "@mui/material";
-
+import { Box, Container, Grid, Typography, Link, IconButton, Button } from "@mui/material";
+let limitrestrict=3
 function CartPage() {
-
+  const [fetchedarray, setfetchedarray] = useState([])
+const [restricted, setrestricted] = useState(false)
   const [sended, setsended] = useState(false)
-     let {items,cart,setcart,user,token,settoken }=useContext(ourcontext)
+     let {items,cart,setcart,user,token,settoken,hosteluser,hstelusertotalbill,sethstelusertotalbill }=useContext(ourcontext)
   const [paymenttype, setpaymenttype] = useState("online")
   
   // Example Usage
- 
+
   ///////
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
@@ -31,19 +33,24 @@ useEffect(() => {
 
        createdAt: serverTimestamp(),
    
-paymenttype,done:false
-
+paymenttype,done:false,
+hosteluser
      })
 
      localStorage.setItem("token",JSON.stringify(token))
 
    
-
+// console.log(JSON.parse(token.foods)[0],"978787")
 
    
   }
   
 }, [cart,user,paymenttype])
+
+useEffect(() => {
+ console.log(JSON.parse(localStorage.getItem("cart")),"cccccc")
+//  setcart(JSON.parse(localStorage.getItem("cart")))
+} )
 
 
   // Load saved cart items from localStorage
@@ -52,8 +59,89 @@ paymenttype,done:false
 setCartItems(JSON.parse(loca))
 setcart(JSON.parse(loca))
 console.log(loca,"looocartyh")
+
+const q = query(
+  collection(db, "canteen"),
+  orderBy("createdAt", "desc"),
+  limit(50)
+);
+
+const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+  const fetchedMessages = [];
+  QuerySnapshot.forEach((doc) => {
+    fetchedMessages.push({ ...doc.data(), id: doc.id });
+  });
+
+  fetchedMessages.forEach(el => {
+    el.createdAt = new Date(el.createdAt.seconds * 1000);
+  });
+
+  const sortedMessages = fetchedMessages.sort((a, b) => b.createdAt - a.createdAt);
+
+  sortedMessages.forEach(el => {
+    el.createdAt = el.createdAt.toLocaleString();
+  });
+
+  sortedMessages.forEach(order=>{
+
+console.log(order,"oororooroor")
+    if (order.hosteluser   && !order.done) {
+
+  console.log(order,"uuuuuuuuuuuuuuuu")
+      let foods = JSON.parse(order.foods);
+      let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+     order.monthlyamnt=orderTotal;
+     console.log(  order.monthlyamnt,"oooooo")
+     sethstelusertotalbill(prev=>{
+      return prev+= order.monthlyamnt
+     })
+
+
+   
+
+   
+
+    }
+    return order
+  })
+
+  setfetchedarray(sortedMessages);
+});
+
+return () => unsubscribe();
+
+
+
+
   }, []);
 
+
+
+    useEffect(() => {
+    
+
+      
+   let newar=   fetchedarray?.filter(e=>{
+    console.log(e,"eeee",user)
+
+return e.email==user.email  && !e.done
+      })
+  
+
+if (newar.length>limitrestrict) {
+  setrestricted(true)
+}
+     
+
+    }, [fetchedarray])
+    
+
+    useEffect(() => {
+     
+
+      console.log(restricted,"refhvne")
+    }, [restricted])
+    
   // Handle checkout
   const handleCheckout = () => {
     // You can add payment gateway logic or navigate to a checkout page
@@ -176,14 +264,17 @@ useEffect(() => {
 
   return (
     <div className="p-10 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
+      <h1 className="text-3xl font-bold mb-6">Your Cart pending bill {hstelusertotalbill} </h1>
       {cartItems.length === 0 ? (
         <p className="text-lg">Your cart is empty!</p>
       ) : (
         <div>
           <ul className="space-y-6">
             {cartItems.map((item) => (
-              <li
+              <>
+             
+              
+               <li
                 key={item.id}
                 className="flex items-center gap-6 border-b pb-4"
               >
@@ -219,6 +310,10 @@ useEffect(() => {
                   Remove
                 </button>
               </li>
+
+
+              </>
+             
             ))}
           </ul>
 
@@ -235,15 +330,18 @@ useEffect(() => {
           {/* Total Price */}
           <div className="flex justify-between items-center mt-6"  style={{display:"block"}}>
             <p className="font-semibold text-xl">Total: ${calculateTotal()}</p>
-            <button
-              onClick={handleCheckout}
-              className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
-            >
-              Proceed to Checkout
-             {sended&&<FileDownloadDoneIcon/>} 
+           {!restricted?
+            <button 
+            onClick={handleCheckout}
+            className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+          >
+            Proceed to Checkout
+           {sended&&<FileDownloadDoneIcon/>} 
 
-            </button>
-            {sended&&<button  
+          </button>:
+          <Button sx={{background:"red",color:"white"}}  >  you are Restricted  until pay remaind bills </Button>
+          }
+            {sended && !restricted&&<button  
               onClick={()=>navigate("/token")}
               className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 ml-1"
             >
