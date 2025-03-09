@@ -4,11 +4,13 @@ import { ourcontext } from "../main";
 import { db } from "../Firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
+import { Box, Container, Grid, Typography, Link, IconButton } from "@mui/material";
+
 function CartPage() {
 
   const [sended, setsended] = useState(false)
      let {items,cart,setcart,user,token,settoken }=useContext(ourcontext)
-  
+  const [paymenttype, setpaymenttype] = useState("online")
   
   // Example Usage
  
@@ -20,14 +22,16 @@ useEffect(() => {
  
  
 
-  if (user  && cart) {
+  if (user  && cart && paymenttype) {
+
+    console.log(cart,"carrtyujk")
     let {uid,email}=user
    settoken({
     uid,email,foods:JSON.stringify(cart),
 
        createdAt: serverTimestamp(),
    
-
+paymenttype
 
      })
 
@@ -39,7 +43,7 @@ useEffect(() => {
    
   }
   
-}, [cart,user])
+}, [cart,user,paymenttype])
 
 
   // Load saved cart items from localStorage
@@ -53,7 +57,7 @@ console.log(loca,"looocartyh")
   // Handle checkout
   const handleCheckout = () => {
     // You can add payment gateway logic or navigate to a checkout page
-    alert("Proceeding to checkout!");
+    // alert("Proceeding to checkout!");
 
 sendMessage()
 
@@ -69,7 +73,7 @@ sendMessage()
  
 
 if (!cart) {
-  alert("emo")
+  alert("empty cart")
   
   return
 }
@@ -94,6 +98,9 @@ await addDoc(collection(db, "canteen"),token );
   };
 
 
+useEffect(() => {
+// alert(paymenttype)
+}, [paymenttype])
 
   // Update quantity of item in cart
   const updateItemQuantity = (itemId, quantity) => {
@@ -111,6 +118,8 @@ await addDoc(collection(db, "canteen"),token );
     localStorage.setItem("cart", JSON.stringify(updatedCart)); // Save to localStorage
   };
 
+
+  
   // Calculate total price
   const calculateTotal = () => {
     return cartItems
@@ -211,6 +220,16 @@ await addDoc(collection(db, "canteen"),token );
             ))}
           </ul>
 
+<Box  bgcolor={"red"}  height={"5vh"} width={"100%"}  display={"flex"}  justifyContent={"space-around"} alignItems={"center"} >
+<p>payment:</p>
+<Box sx={{display:"flex",justifyContent:"space-around",alignItems:"center"}}  width={"70%"} height={"100%"}>
+
+ <div> <input  onChange={(e)=>setpaymenttype(e.currentTarget.value)}  checked={paymenttype=="online"&&true}  type="radio" id="Online" name="fav_language" value="online"  />
+ <label for="Online">Online</label><br/></div>
+ <div> <input  onChange={(e)=>setpaymenttype(e.currentTarget.value)} checked={paymenttype=="Offline"&&true}   type="radio" id="Offline" name="fav_language" value="Offline"  />
+ <label for="Offline">Offline</label><br/></div>
+</Box>
+</Box>
           {/* Total Price */}
           <div className="flex justify-between items-center mt-6"  style={{display:"block"}}>
             <p className="font-semibold text-xl">Total: ${calculateTotal()}</p>

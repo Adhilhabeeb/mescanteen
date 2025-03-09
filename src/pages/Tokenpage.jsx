@@ -55,7 +55,7 @@ useEffect(() => {
                 <img src={food.image} alt={food.name} />
                 <div>
                   <p className="food-name">{food.name}</p>
-                  <p className="food-quantity">Qty: {food.quantity}</p>
+                  <p className="food-quantity">Qty: {food.quantity+1}</p>
                 </div>
               </li>
             ))}

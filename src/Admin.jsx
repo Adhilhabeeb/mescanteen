@@ -1,139 +1,119 @@
-import { collection, limit, onSnapshot, or, orderBy, query } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react'
+import { collection, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
+import React, { useEffect, useRef, useState } from 'react'
 import { db } from './Firebase';
 import { 
     Table, TableBody, TableCell, TableContainer, 
     TableHead, TableRow, Paper, IconButton, Collapse, Box, Typography 
   } from "@mui/material";
-  import AddIcon from "@mui/icons-material/Add";
-  import RemoveIcon from "@mui/icons-material/Remove";
-  import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-  import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-  
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+
 function Admin() {
-const [fetchedarray, setfetchedarray] = useState([])
-const [orders, setorders] = useState([])
-useEffect(() => {
-//  console.log(fetchedarray[0].foods,"ffhfhcncv")
+  const [fetchedarray, setfetchedarray] = useState([]);
+  const [expanded, setExpanded] = useState({});
+  const [totalbudgey, setTotalbudgey] = useState(0); // <-- Use state
 
-}, [fetchedarray])
-const [expanded, setExpanded] = useState({});
+  useEffect(() => {
+    const q = query(
+      collection(db, "canteen"),
+      orderBy("createdAt", "desc"),
+      limit(50)
+    );
+    
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+      const fetchedMessages = [];
+      QuerySnapshot.forEach((doc) => {
+        fetchedMessages.push({ ...doc.data(), id: doc.id });
+      });
 
-  // Toggle Order Details
-  const toggleExpand = (id) => {
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+      fetchedMessages.forEach(el => {
+        el.createdAt = new Date(el.createdAt.seconds * 1000);
+      });
 
-  // Handle Quantity Change
-  const handleQuantityChange = (orderId, foodId, change) => {
-    console.log(`Change quantity for order ${orderId}, food ${foodId}: ${change}`);
-    // Add Firebase update logic here if needed
-  };
+      const sortedMessages = fetchedMessages.sort((a, b) => b.createdAt - a.createdAt);
 
-    useEffect(() => {
-        const q = query(
-          collection(db, "canteen"),
-          orderBy("createdAt", "desc"),
-          limit(50)
-        );
-        
-        const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-          const fetchedMessages = [];
-          QuerySnapshot.forEach((doc) => {
-      
-      
-          console.log(doc.data(),"dattatatat")
-            fetchedMessages.push({ ...doc.data(), id: doc.id });
-          });
+      sortedMessages.forEach(el => {
+        el.createdAt = el.createdAt.toLocaleString();
+      });
 
-fetchedMessages.forEach(el => {
-    el.createdAt = new Date(el.createdAt.seconds * 1000);
-  });
-  
+      setfetchedarray(sortedMessages);
+    });
 
-  const sortedMessages = fetchedMessages.sort((a, b) => b.createdAt - a.createdAt);
-  
+    return () => unsubscribe();
+  }, []);
 
-  sortedMessages.forEach(el => {
-    return el.createdAt = el.createdAt.toLocaleString();
-  });
-  
+  // Update total budget when fetchedarray changes
+  useEffect(() => {
+    let newTotal = 0;
+    fetchedarray.forEach(order => {
+      let foods = JSON.parse(order.foods);
+      newTotal += foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+    });
+    setTotalbudgey(newTotal);
+  }, [fetchedarray]);
 
-  console.log(sortedMessages,"soooooo");
-  
-        //   console.log(sortedMessages,"ff")
-      setfetchedarray(sortedMessages)
-      
-        });
-      
-      
-      
-        
-        // return () => unsubscribe;
-      }, []);
-      
   return (
-    <TableContainer component={Paper} sx={{ maxWidth: 900, margin: "auto", mt: 3 }}>
-    <Table>
-      <TableHead>
-        <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-          <TableCell><strong>Order ID</strong></TableCell>
-          <TableCell><strong>Email</strong></TableCell>
-          <TableCell><strong>Date</strong></TableCell>
-          <TableCell><strong>Total Price</strong></TableCell>
-          <TableCell><strong>Actions</strong></TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {fetchedarray.map((order) => {
+    <>
+      <TableContainer component={Paper} sx={{ maxWidth: 900, margin: "auto", mt: 3 }}>
+        <Box width={"100%"} height={"5vh"} textAlign={"end"} p={2}>
+          <Typography variant="h6">Money Received: ₹{totalbudgey}</Typography>
+        </Box>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+              <TableCell><strong>Order ID</strong></TableCell>
+              <TableCell><strong>Email</strong></TableCell>
+              <TableCell><strong>Date</strong></TableCell>
+              <TableCell><strong>Total Price</strong></TableCell>
+              <TableCell><strong>Actions</strong></TableCell>
+              <TableCell><strong>Payment</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {fetchedarray.map(order => {
+              let foods = JSON.parse(order.foods);
+              const totalPrice = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
 
-        let foods=JSON.parse(order.foods)
-          const totalPrice = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+              return (
+                <React.Fragment key={order.id}>
+                  <TableRow>
+                    <TableCell>{order.id}</TableCell>
+                    <TableCell>{order.email}</TableCell>
+                    <TableCell>{order.createdAt}</TableCell>
+                    <TableCell>₹{totalPrice}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => setExpanded(prev => ({ ...prev, [order.id]: !prev[order.id] }))}>
+                        {expanded[order.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>{order.paymenttype}</TableCell>
 
-        console.log(order,"oo",foods)
-
-          return (
-            <React.Fragment key={order.id}>
-              <TableRow>
-                <TableCell>{order.id}</TableCell>
-                <TableCell>{order.email}</TableCell>
-                <TableCell>{order.createdAt}</TableCell>
-                <TableCell>₹{totalPrice}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => toggleExpand(order.id)}>
-                    {expanded[order.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-
-              {/* Expandable Row for Ordered Items */}
-              <TableRow>
-                <TableCell colSpan={5} sx={{ padding: 0 }}>
-                  <Collapse in={expanded[order.id]} timeout="auto" unmountOnExit>
-                    <Box sx={{ padding: 2, backgroundColor: "#fafafa" }}>
-                      <Typography variant="h6" sx={{ mb: 2 }}>Ordered Items</Typography>
-                      {foods.map((food) => (
-                        <Box key={food.id} sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-                          <img src={food.image} alt={food.name} width="60" height="60" style={{ borderRadius: "8px" }} />
-                          <Typography variant="body1">{food.name}</Typography>
-                          <Typography variant="body2" color="gray">₹{food.price}</Typography>
-                         
-                          <Typography> qnty:{food.quantity}</Typography>
-                        
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={5} sx={{ padding: 0 }}>
+                      <Collapse in={expanded[order.id]} timeout="auto" unmountOnExit>
+                        <Box sx={{ padding: 2, backgroundColor: "#fafafa" }}>
+                          <Typography variant="h6" sx={{ mb: 2 }}>Ordered Items</Typography>
+                          {foods.map(food => (
+                            <Box key={food.id} sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+                              <img src={food.image} alt={food.name} width="60" height="60" style={{ borderRadius: "8px" }} />
+                              <Typography variant="body1">{food.name}</Typography>
+                              <Typography variant="body2" color="gray">₹{food.price}</Typography>
+                              <Typography> qnty: {food.quantity}</Typography>
+                            </Box>
+                          ))}
                         </Box>
-                      ))}
-                    </Box>
-                  </Collapse>
-                </TableCell>
-              </TableRow>
-            </React.Fragment>
-          );
-       
-       })}
-      </TableBody>
-    </Table>
-  </TableContainer>
-  )
+                      </Collapse>
+                    </TableCell>
+                  </TableRow>
+                </React.Fragment>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
 }
 
-export default Admin
+export default Admin;
