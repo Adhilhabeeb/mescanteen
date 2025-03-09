@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import LandingPageHeroContent from "../components/LandingPageHeroContent";
 import LandingPageCards from "../components/LandingPageCards";
 import { ourcontext } from "../main";
+import Footer from "../components/Footer";
 
 function LandingPage() {
   
@@ -20,6 +21,8 @@ function LandingPage() {
         <Header />
         <LandingPageHeroContent />
         <LandingPageCards />
+
+       
         {/* <OrderConfirmation.jsx></OrderConfirmation.jsx> */}
       </section>
     </main>

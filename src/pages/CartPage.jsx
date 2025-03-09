@@ -30,6 +30,9 @@ useEffect(() => {
 
 
      })
+
+     localStorage.setItem("token",JSON.stringify(token))
+
    
 
 
@@ -209,7 +212,7 @@ await addDoc(collection(db, "canteen"),token );
           </ul>
 
           {/* Total Price */}
-          <div className="flex justify-between items-center mt-6">
+          <div className="flex justify-between items-center mt-6"  style={{display:"block"}}>
             <p className="font-semibold text-xl">Total: ${calculateTotal()}</p>
             <button
               onClick={handleCheckout}
@@ -219,9 +222,9 @@ await addDoc(collection(db, "canteen"),token );
              {sended&&<FileDownloadDoneIcon/>} 
 
             </button>
-            {sended&&<button
+            {sended&&<button  
               onClick={()=>navigate("/token")}
-              className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+              className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 ml-1"
             >
               view  token 
             

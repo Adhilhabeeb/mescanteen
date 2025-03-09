@@ -21,6 +21,7 @@ import WishlistPage from "./pages/WishlistPage.jsx";
 import Food from "./food.jsx";
 import { Token } from "@mui/icons-material";
 import TokenPage from "./pages/Tokenpage.jsx";
+import Footer from "./components/Footer.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -39,7 +40,7 @@ const router = createBrowserRouter(
 );
 export let ourcontext =createContext()
 function Main(props) {
-const [token, settoken] = useState(null)
+const [token, settoken] = useState(JSON.parse(localStorage.getItem("token")))
 const [admins, setadmins] = useState(["abhinavraj.cse22@mbits.ac.in","adhilhabeeb960571@gmail.com"])
   const [user, setuser] = useState(null)
 const [admin, setadmin] = useState(false)
@@ -89,10 +90,15 @@ setuser(authuser)
 
 }
 createRoot(document.getElementById("root")).render(
+<>
+
 <Main>
 <RouterProvider router={router} />
+<Footer/>
 
 </Main>
+
+</>
 
 );
 

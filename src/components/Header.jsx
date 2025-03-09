@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CgMenuRight, CgClose } from "react-icons/cg";
 import { Link, useNavigate } from "react-router-dom";
+import { ourcontext } from "../main";
 
 function Header({ bg, p }) {
+  let { user } = useContext(ourcontext);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -23,11 +25,26 @@ function Header({ bg, p }) {
   };
 
   return (
-    <header className={`flex items-center justify-between ${bg || "bg-transparent"} px-6 sm:px-[10%] ${p || "p-6"}`}>
+    <header className={`flex items-center justify-between ${bg || "bg-transparent"} sm:px-[10%] ${p || "p-6"}`}>
       <h1 className="text-white font-extrabold text-3xl sm:text-5xl italic font-serif py-1 sm:p-2">
         Cafetech
       </h1>
-      
+
+      {/* User Info */}
+      {isAuthenticated && user && (
+        <div className="flex items-center gap-4">
+          {user.photoUrl ? (
+            <img
+              src={user.photoUrl}
+              alt="User"
+              className="w-10 h-10 rounded-full border border-white"
+            />
+          ) : (
+            <p className="text-white font-semibold">{user.email}</p>
+          )}
+        </div>
+      )}
+
       {/* Desktop Menu */}
       <nav className="hidden lg:flex items-center gap-6">
         <p className="font-bold text-white">Cafetech Corporate</p>

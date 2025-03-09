@@ -1,10 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import html2canvas from "html2canvas";
 import { ourcontext } from "../main";
 import "./Tokenpage.css"; // Import the CSS file
 
 const TokenPage = () => {
-  const { token } = useContext(ourcontext);
+  const { token ,settoken} = useContext(ourcontext);
+
+useEffect(() => {
+  
+
+if ( JSON.parse(localStorage.getItem("token"))) {
+    settoken( JSON.parse(localStorage.getItem("token")))
+}
+
+ 
+}, [])
+
+
+useEffect(() => {
+  
+
+ console.log(token,"yytttt")
+}, [])
 
   const handleDownload = () => {
     const captureElement = document.getElementById("tokenContainer");
