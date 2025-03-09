@@ -19,6 +19,8 @@ import ItemDetailPage from "./pages/ItemDetailPage.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import WishlistPage from "./pages/WishlistPage.jsx";
 import Food from "./food.jsx";
+import { Token } from "@mui/icons-material";
+import TokenPage from "./pages/Tokenpage.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -26,6 +28,8 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
       <Route path="about" element={<AboutUs />} />
+      <Route path="token" element={<TokenPage />} />
+
       <Route path="/item/:id" element={<ItemDetailPage />} />
       <Route path="/cart" element={<CartPage />} /> {/* Cart Route */}
       <Route path="/wishlist" element={<WishlistPage />} />
@@ -35,7 +39,7 @@ const router = createBrowserRouter(
 );
 export let ourcontext =createContext()
 function Main(props) {
-
+const [token, settoken] = useState(null)
 const [admins, setadmins] = useState(["abhinavraj.cse22@mbits.ac.in","adhilhabeeb960571@gmail.com"])
   const [user, setuser] = useState(null)
 const [admin, setadmin] = useState(false)
@@ -74,7 +78,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins}}>
+    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token}}>
 
 {props.children}
 

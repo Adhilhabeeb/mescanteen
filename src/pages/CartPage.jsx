@@ -7,13 +7,38 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 function CartPage() {
 
   const [sended, setsended] = useState(false)
-     let {items,cart,setcart,user}=useContext(ourcontext)
-
+     let {items,cart,setcart,user,token,settoken }=useContext(ourcontext)
+  
+  
+  // Example Usage
+ 
+  ///////
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
 
+useEffect(() => {
+ 
+ 
 
+  if (user  && cart) {
+    let {uid,email}=user
+   settoken({
+    uid,email,foods:JSON.stringify(cart),
+
+       createdAt: serverTimestamp(),
+   
+
+
+     })
+   
+
+
+   
+  }
   
+}, [cart,user])
+
+
   // Load saved cart items from localStorage
   useEffect(() => {
   let loca=localStorage.getItem("cart")
@@ -37,24 +62,22 @@ sendMessage()
 
    let {uid,email}=user
    
-   
-  
+ 
+ 
 
 if (!cart) {
   alert("emo")
   
   return
 }
-
-  
-await addDoc(collection(db, "canteen"), {
-     uid,email,foods:JSON.stringify(cart),
-
-        createdAt: serverTimestamp(),
-    
+if (token) {
+ console.log(token,"yyy")
+}
 
 
-      });
+
+
+await addDoc(collection(db, "canteen"),token );
    setsended(true)
    
   };
@@ -196,6 +219,15 @@ await addDoc(collection(db, "canteen"), {
              {sended&&<FileDownloadDoneIcon/>} 
 
             </button>
+            {sended&&<button
+              onClick={()=>navigate("/token")}
+              className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600"
+            >
+              view  token 
+            
+
+            </button>}
+
           </div>
         </div>
       )}

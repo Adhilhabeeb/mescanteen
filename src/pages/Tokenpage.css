@@ -1,0 +1,74 @@
+/* TokenPage.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    min-height: 100vh;
+  }
+  
+  .token-container {
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 320px;
+  }
+  
+  .token-container h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .food-list {
+    margin-top: 10px;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .food-item {
+    display: flex;
+    align-items: center;
+    background-color: #e2e8f0;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  
+  .food-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .food-item p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .download-btn {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .download-btn:hover {
+    background-color: #0056b3;
+  }
+  
