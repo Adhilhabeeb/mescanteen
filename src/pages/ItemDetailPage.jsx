@@ -1,119 +1,111 @@
 import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
+import { Card, CardMedia, CardContent, Typography, Button, Grid, Box } from "@mui/material";
 
 function ItemDetailPage() {
-let navigate=useNavigate()
-  let foodcontex=useContext(ourcontext)
+  let navigate = useNavigate();
+  let foodcontex = useContext(ourcontext);
   const location = useLocation();
   const { food } = location.state || {}; // Retrieve food data passed via navigation
-food.quantity=1
-console.log(food,"food")
-const getRandomPrice = () => {
-  return Math.floor(Math.random() * (500 - 50 + 1)) + 50;
-};
-food.price=getRandomPrice()
 
-  const [cart, setCart] = useState(
-    JSON.parse(localStorage.getItem("cart")) || []
-  );
-  const [wishlist, setWishlist] = useState(
-    JSON.parse(localStorage.getItem("wishlist")) || []
-  );
+  if (!food) {
+    return <Typography variant="h5" align="center">Item not found!</Typography>;
+  }
+
+  food.quantity = 1;
+
+  const getRandomPrice = () => Math.floor(Math.random() * (500 - 50 + 1)) + 50;
+  food.price = getRandomPrice();
+
+  const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")) || []);
+  const [wishlist, setWishlist] = useState(JSON.parse(localStorage.getItem("wishlist")) || []);
 
   // Add to Cart
   const addToCart = () => {
-    
-    
-let exist=cart.some(el=>{
- return el.name==food.name
-})
-
-
-if (exist) {
-  alert("Exist")
-  let newcart=cart.map(el=>{
-    return el.name==food.name?{...el,quantity:el.quantity+1}:el
- })
-
- setCart(newcart);
-
-
-console.log(newcart,"nnnnnnnnneewwwwww")
-foodcontex.setcart(newcart)
-localStorage.setItem("cart", JSON.stringify(newcart)); // Store updated cart in localStorage
-
-}else{
-  const newCart = [...cart, food];
- setCart(newCart);
- foodcontex.setcart(newCart)
- localStorage.setItem("cart", JSON.stringify(newCart)); // Store updated cart in localStorage
-
-
-}
-
-   
-    alert(`${food.name} added to Cart!`);
-   navigate("/cart")
-
+    let exist = cart.some(el => el.name === food.name);
+    if (exist) {
+      let newCart = cart.map(el => el.name === food.name ? { ...el, quantity: el.quantity + 1 } : el);
+      setCart(newCart);
+      foodcontex.setcart(newCart);
+      localStorage.setItem("cart", JSON.stringify(newCart));
+    } else {
+      const newCart = [...cart, food];
+      setCart(newCart);
+      foodcontex.setcart(newCart);
+      localStorage.setItem("cart", JSON.stringify(newCart));
+    }
+    navigate("/cart");
   };
 
   // Add to Wishlist
   const addToWishlist = () => {
-    const newWishlist = [...wishlist, food];
-    setWishlist(newWishlist);
-    localStorage.setItem("wishlist", JSON.stringify(newWishlist)); // Store updated wishlist in localStorage
-    alert(`${food.name} added to Wishlist!`);
+    if (!wishlist.some(el => el.name === food.name)) {
+      const newWishlist = [...wishlist, food];
+      setWishlist(newWishlist);
+      localStorage.setItem("wishlist", JSON.stringify(newWishlist));
+    }
   };
 
-  // Buy Now (for demonstration, we'll just add it to the cart and redirect to the cart page)
+  // Buy Now
   const buyNow = () => {
     const newCart = [...cart, food];
     setCart(newCart);
-    foodcontex.setcart(newCart)
-    localStorage.setItem("cart", JSON.stringify(newCart)); // Store updated cart in localStorage
-    alert(`${food.name} added to Cart!`);
-    // Redirect to Cart Page (if you have a cart page set up)
-    navigate("/cart"); // Uncomment this if you have a cart page
+    foodcontex.setcart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    navigate("/cart");
   };
 
-  if (!food) {
-    return <p>Item not found!</p>;
-  }
-
   return (
-    <div className="p-10">
-      <h1>{food.name}</h1>
-      <img src={food.image} alt={food.name} />
-      <p>{food.description}</p>
-      <p>Rating: {food.rating}</p>
-      <p>
-        Preparation time: {food.prepTimeMinutes} - {food.prepTimeMinutes + 5}{" "}
-        min
-      </p>
-      <p>price:{food.price}</p>
+    <Box sx={{ maxWidth: 900, margin: "auto", padding: 3 }}>
+      <Card sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, boxShadow: 3 }}>
+        {/* Left Side - Image */}
+        <CardMedia
+          component="img"
+          image={food.image}
+          alt={food.name}
+          sx={{ width: { xs: "100%", md: 350 }, height: 300, objectFit: "cover" }}
+        />
 
-      <div className="flex gap-4 mt-6">
-        <button
-          onClick={addToCart}
-          className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
-        >
-          Add to Cart
-        </button>
-        <button
-          onClick={addToWishlist}
-          className="bg-yellow-500 text-white p-2 rounded hover:bg-yellow-600"
-        >
-          Add to Wishlist
-        </button>
-        <button
-          onClick={buyNow}
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Buy Now
-        </button>
-      </div>
-    </div>
+        {/* Right Side - Details */}
+        <CardContent sx={{ flex: 1, padding: 3 }}>
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
+            {food.name}
+          </Typography>
+          <Typography variant="body1" color="textSecondary" gutterBottom>
+            {food.description}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Rating: ⭐ {food.rating} / 5
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Preparation Time: {food.prepTimeMinutes} - {food.prepTimeMinutes + 5} min
+          </Typography>
+          <Typography variant="h5" fontWeight="bold" sx={{ mt: 2 }}>
+            Price: ₹{food.price}
+          </Typography>
+
+          {/* Buttons */}
+          <Grid container spacing={2} sx={{ marginTop: 3 }}>
+            <Grid item xs={12} sm={4}>
+              <Button fullWidth variant="contained" color="primary" onClick={addToCart}>
+                Add to Cart 🛒
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Button fullWidth variant="contained" color="secondary" onClick={addToWishlist}>
+                Add to Wishlist ❤️
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Button fullWidth variant="contained" color="success" onClick={buyNow}>
+                Buy Now 🛍️
+              </Button>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
 

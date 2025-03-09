@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
 import { db } from "../Firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, serverTimestamp } from "firebase/firestore";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { Box, Container, Grid, Typography, Link, IconButton } from "@mui/material";
 
@@ -31,7 +31,7 @@ useEffect(() => {
 
        createdAt: serverTimestamp(),
    
-paymenttype
+paymenttype,done:false
 
      })
 
@@ -172,6 +172,8 @@ useEffect(() => {
   // }
   
   // })
+
+
   return (
     <div className="p-10 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Your Cart</h1>

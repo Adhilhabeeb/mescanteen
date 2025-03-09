@@ -29,12 +29,12 @@ function Login() {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        alert("Login successful!");
+        // alert("Login successful!");
    setuser(userCredential.user)
       })
       .catch((error) => {
         setError(error.message);
-        alert(error.message);
+        // alert(error.message);
       });
   };
 
@@ -80,7 +80,7 @@ function Login() {
         navigate("/"); // Redirect to Home Page
       } else {
         console.log("Invalid credentials"); // Debugging: Invalid login attempt
-        setError("Invalid email or password");
+        // setError("Invalid email or password");
         setLoading(false);
       }
     }, 1000);
@@ -90,7 +90,7 @@ function Login() {
     <div className="p-10 max-w-md mx-auto bg-white rounded shadow-md">
       <h2 className="text-xl font-bold mb-4 text-center">Login</h2>
 
-      {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+      {/* {error && <p className="text-red-500 text-sm mb-3">{error}</p>} */}
 
       <form onSubmit={handleLogin} className="flex flex-col gap-3">
         <input

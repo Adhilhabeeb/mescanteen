@@ -40,7 +40,7 @@ function Signup() {
       })
       .catch((error) => {
 
-        alert(":eeror")
+        alert("plz enter valid data ")
         setError(true)
         const errorCode = error.code;
         const errorMessage = error.message;
