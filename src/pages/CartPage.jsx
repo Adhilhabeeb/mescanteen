@@ -68,6 +68,9 @@ const q = query(
 
 const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
   const fetchedMessages = [];
+  let newTotal = 0; // Recalculate from scratch
+
+  
   QuerySnapshot.forEach((doc) => {
     fetchedMessages.push({ ...doc.data(), id: doc.id });
   });
@@ -81,30 +84,18 @@ const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
   sortedMessages.forEach(el => {
     el.createdAt = el.createdAt.toLocaleString();
   });
+  sortedMessages.forEach(order => {
+    order.createdAt = order.createdAt.toLocaleString();
 
-  sortedMessages.forEach(order=>{
-
-console.log(order,"oororooroor")
-    if (order.hosteluser   && !order.done) {
-
-  console.log(order,"uuuuuuuuuuuuuuuu")
+    // Only consider hostel users & orders that are NOT done
+    if (order.hosteluser && !order.done  ) {
       let foods = JSON.parse(order.foods);
       let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
-     order.monthlyamnt=orderTotal;
-     console.log(  order.monthlyamnt,"oooooo")
-     sethstelusertotalbill(prev=>{
-      return prev+= order.monthlyamnt
-     })
-
-
-   
-
-   
-
+      newTotal += orderTotal; // Add to total
     }
-    return order
-  })
+  });
 
+  sethstelusertotalbill(newTotal); // Set the correct total
   setfetchedarray(sortedMessages);
 });
 
@@ -124,7 +115,7 @@ return () => unsubscribe();
    let newar=   fetchedarray?.filter(e=>{
     console.log(e,"eeee",user)
 
-return e.email==user.email  && !e.done
+return e.email==user.email  && !e.done &&!e.hosteluser
       })
   
 
@@ -173,8 +164,9 @@ if (token) {
 
 
 await addDoc(collection(db, "canteen"),token );
+
    setsended(true)
-   
+  
   };
 
   // Remove item from cart

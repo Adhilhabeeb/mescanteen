@@ -10,9 +10,20 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { ourcontext } from "./main";
+import { useNavigate } from "react-router-dom";
 
 function Admin() {
+  let navigate=useNavigate()
     let {user,setuser,sethstelusertotalbill,hstelusertotalbill}=useContext(ourcontext)
+  useEffect(() => {
+  if(hstelusertotalbill!=0){
+//  localStorage.setItem("hosteltotalpay",hstelusertotalbill)
+// alert(hstelusertotalbill)
+    
+  }
+  }, [hstelusertotalbill])
+  
+
   
   const [fetchedarray, setfetchedarray] = useState([]);
   const [expanded, setExpanded] = useState({});
@@ -20,57 +31,112 @@ function Admin() {
   const [totalonlinepayment, settotalonlinepayment] = useState(0);
   const [totalofflinepayment, settotalofflinepayment] = useState(0);
 
+//   useEffect(() => {
+//     const q = query(
+//       collection(db, "canteen"),
+//       orderBy("createdAt", "desc"),
+//       limit(50)
+//     );
+    
+//     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+//       const fetchedMessages = [];
+//       QuerySnapshot.forEach((doc) => {
+//         fetchedMessages.push({ ...doc.data(), id: doc.id });
+//       });
+
+//       fetchedMessages.forEach(el => {
+//         el.createdAt = new Date(el.createdAt.seconds * 1000);
+//       });
+
+//       const sortedMessages = fetchedMessages.sort((a, b) => b.createdAt - a.createdAt);
+
+//       sortedMessages.forEach(el => {
+//         el.createdAt = el.createdAt.toLocaleString();
+//       });
+
+//       // let arrro=sortedMessages.reduce((total,orders)=>{
+
+
+//       // })
+
+//       let totalHostelBill = 0;
+
+//       sortedMessages.forEach(order => {
+//         if (order.hosteluser && !order.done) {
+//           let foods = JSON.parse(order.foods);
+//           let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+//           order.monthlyamnt = orderTotal;
+//           totalHostelBill += order.monthlyamnt;
+//         }
+//       });
+      
+//       // Update state only once after loop finishes
+//       sethstelusertotalbill(totalHostelBill);
+      
+
+// navigate("/")
+//       setfetchedarray(sortedMessages);
+//     });
+
+
+// let ee=localStorage.getItem("hosteltotalpay")
+// if (ee) {
+//   // sethstelusertotalbill(ee)
+// }
+
+//     return () =>{ unsubscribe()
+//       // window.location.reload()
+  
+// };
+
+
+
+
+//   }, []);
+
+  // Update total budget when fetchedarray changes
+ 
   useEffect(() => {
     const q = query(
       collection(db, "canteen"),
       orderBy("createdAt", "desc"),
       limit(50)
     );
-    
+  
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
       const fetchedMessages = [];
+      let newTotal = 0; // Recalculate from scratch
+  
       QuerySnapshot.forEach((doc) => {
-        fetchedMessages.push({ ...doc.data(), id: doc.id });
+        const orderData = { ...doc.data(), id: doc.id };
+        orderData.createdAt = new Date(orderData.createdAt.seconds * 1000);
+        fetchedMessages.push(orderData);
       });
-
-      fetchedMessages.forEach(el => {
-        el.createdAt = new Date(el.createdAt.seconds * 1000);
-      });
-
+  
       const sortedMessages = fetchedMessages.sort((a, b) => b.createdAt - a.createdAt);
-
-      sortedMessages.forEach(el => {
-        el.createdAt = el.createdAt.toLocaleString();
-      });
-
-      // let arrro=sortedMessages.reduce((total,orders)=>{
-
-
-      // })
-
-      sortedMessages.forEach(order=>{
+      
+      sortedMessages.forEach(order => {
+        order.createdAt = order.createdAt.toLocaleString();
+  
+        // Only consider hostel users & orders that are NOT done
         if (order.hosteluser && !order.done) {
           let foods = JSON.parse(order.foods);
           let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
-         order.monthlyamnt=orderTotal;
-         sethstelusertotalbill(prev=>{
-          return prev+= order.monthlyamnt
-         })
-
-
-       
-    
+          newTotal += orderTotal; // Add to total
         }
-        return order
-      })
-
+      });
+  // alert(newTotal)
+      sethstelusertotalbill(newTotal); // Set the correct total
       setfetchedarray(sortedMessages);
     });
-
-    return () => unsubscribe();
+  
+    return () => {
+      unsubscribe();
+    };
   }, []);
-
-  // Update total budget when fetchedarray changes
+  
+  
+ 
   useEffect(() => {
     let newTotal = 0;
     let onlinepay = 0;
@@ -170,7 +236,7 @@ return prev=totalofflinepayment+totalonlinepayment
                     <TableCell>{order.createdAt}</TableCell>
                     <TableCell>₹{totalPrice}</TableCell>
                     <TableCell>{order.paymenttype}</TableCell>
-{order.hosteluser && order.monthlyamnt &&<h1> crt pending {hstelusertotalbill}</h1>}
+{order.hosteluser && hstelusertotalbill  &&<h1> crt pending {hstelusertotalbill}</h1>}
                     <TableCell>
                       <IconButton onClick={() => setExpanded(prev => ({ ...prev, [order.id]: !prev[order.id] }))}>
                         {expanded[order.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
