@@ -8,10 +8,17 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import { Box, Container, Grid, Typography, Link, IconButton, Button } from "@mui/material";
 let limitrestrict=3
 function CartPage() {
+  function generateRandom10Digit() {
+    return Math.floor(1000000000 + Math.random() * 9000000000);
+  }
+  
+
+  
   const [fetchedarray, setfetchedarray] = useState([])
 const [restricted, setrestricted] = useState(false)
   const [sended, setsended] = useState(false)
-     let {items,cart,setcart,user,token,settoken,hosteluser,hstelusertotalbill,sethstelusertotalbill }=useContext(ourcontext)
+     let {items,cart,setcart,user,token,settoken,hosteluser,hstelusertotalbill,sethstelusertotalbill ,admin,
+setproceedcart}=useContext(ourcontext)
   const [paymenttype, setpaymenttype] = useState("online")
   
   // Example Usage
@@ -22,14 +29,14 @@ const [restricted, setrestricted] = useState(false)
 
 useEffect(() => {
  
- 
+
 
   if (user  && cart && paymenttype) {
 
     console.log(cart,"carrtyujk")
     let {uid,email}=user
    settoken({
-    uid,email,foods:JSON.stringify(cart),
+    uid:generateRandom10Digit(),email,foods:JSON.stringify(cart),
 
        createdAt: serverTimestamp(),
    
@@ -56,9 +63,12 @@ useEffect(() => {
   // Load saved cart items from localStorage
   useEffect(() => {
   let loca=localStorage.getItem("cart")
-setCartItems(JSON.parse(loca))
+  if (loca) {
+    setCartItems(JSON.parse(loca))
 setcart(JSON.parse(loca))
 console.log(loca,"looocartyh")
+  }
+
 
 const q = query(
   collection(db, "canteen"),
@@ -139,8 +149,10 @@ if (newar.length>limitrestrict) {
     // alert("Proceeding to checkout!");
 
 sendMessage()
+setproceedcart(true)
+localStorage.removeItem("cart")
 
-    
+
     // Example: navigate('/checkout'); // Uncomment to navigate to checkout page
   };
   const sendMessage = async (event) => {
@@ -315,6 +327,8 @@ useEffect(() => {
 
  <div> <input  onChange={(e)=>setpaymenttype(e.currentTarget.value)}  checked={paymenttype=="online"&&true}  type="radio" id="Online" name="fav_language" value="online"  />
  <label for="Online">Online</label><br/></div>
+ <div> <input  onChange={(e)=>setpaymenttype(e.currentTarget.value)}  checked={paymenttype=="hosteler"&&true}  type="radio" id="Online" name="fav_language" value="hosteler"  />
+ <label for="hosteler">hosteler</label><br/></div>
  <div> <input  onChange={(e)=>setpaymenttype(e.currentTarget.value)} checked={paymenttype=="Offline"&&true}   type="radio" id="Offline" name="fav_language" value="Offline"  />
  <label for="Offline">Offline</label><br/></div>
 </Box>

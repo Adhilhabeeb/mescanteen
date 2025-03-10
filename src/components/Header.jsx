@@ -57,6 +57,9 @@ function Header({ bg, p }) {
             <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
           </>
         )}
+
+        {!admin&& <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
+      }
         {!isAuthenticated && (
           <Link to="/about" className="btn border-white text-white px-4 py-2">About Us</Link>
         )}

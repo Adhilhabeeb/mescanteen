@@ -15,6 +15,8 @@ import {
 function AddHostelers() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phumber, setphumber] = useState("")
+  const [location, setlocation] = useState("")
   const [hostelers, setHostelers] = useState([]);
 
   // Function to add a new hosteler
@@ -29,7 +31,7 @@ function AddHostelers() {
     try {
       await addDoc(collection(db, "hostelers"), {
         name,
-        email,
+        email,location,phumber,
         joindate: today,
         timestamp: new Date(),
       });
@@ -73,6 +75,24 @@ function AddHostelers() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+           <TextField
+          label="phnumber"
+          type="email"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={phumber}
+          onChange={(e) => setphumber(e.target.value)}
+        />
+          <TextField
+          label="address&&location"
+          type="email"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={location}
+          onChange={(e) => setlocation(e.target.value)}
+        />
         <Button
           variant="contained"
           color="primary"
@@ -91,10 +111,19 @@ function AddHostelers() {
         {hostelers.map((hosteler) => (
           <Paper key={hosteler.id} style={{ margin: "10px 0", padding: "10px" }}>
             <ListItem>
-              <ListItemText
-                primary={hosteler.name}
-                secondary={`${hosteler.email} (Joined: ${hosteler.joindate})`}
-              />
+            <ListItemText
+  primary={hosteler.name}
+  secondary={
+    <>
+      <Typography variant="body2">Email: {hosteler.email}</Typography>
+      <Typography variant="body2">Phone: {hosteler.phumber}</Typography>
+      <Typography variant="body2">Location: {hosteler.location}</Typography>
+      <Typography variant="body2">Joined: {hosteler.joindate}</Typography>
+    </>
+  }
+/>
+
+                
             </ListItem>
           </Paper>
         ))}

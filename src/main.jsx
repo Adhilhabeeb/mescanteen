@@ -7,7 +7,7 @@ import {
  
   Route,
   RouterProvider,
-  useNavigate,
+  
 } from "react-router-dom";
 import Layout from "./Layout.jsx";
 import HomePage from "./pages/HomePage";
@@ -26,6 +26,7 @@ import TokenPage from "./pages/Tokenpage.jsx";
 import Footer from "./components/Footer.jsx";
 import Addhostelers from "./pages/Addhostelers.jsx";
 import { db } from "./Firebase.js";
+import Historypage from "./pages/History.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
       <Route path="/item/:id" element={<ItemDetailPage />} />
       <Route path="/cart" element={<CartPage />} /> {/* Cart Route */}
       <Route path="addhostel" element={<Addhostelers />} /> {/* Cart Route */}
+      <Route path="history" element={<Historypage />} /> {/* Cart Route */}
 
       
       <Route path="/wishlist" element={<WishlistPage />} />
@@ -47,6 +49,7 @@ const router = createBrowserRouter(
 );
 export let ourcontext =createContext()
 function Main(props) {
+
   const [hstelusertotalbill, sethstelusertotalbill] = useState(0)
 
   
@@ -60,8 +63,13 @@ function Main(props) {
    }, [])
    
   const [hoste, sethoste] = useState(false)
+  const [proceedcart, setproceedcart] = useState(false)
+
+  
   const [hosteluser, sethosteluser] = useState(false)
 const [token, settoken] = useState(JSON.parse(localStorage.getItem("token")))
+const [cashierarr, setcashierarr] = useState(['cashier@mbits.ac.in'])
+const [cashier, setcashier] = useState(false)
 const [admins, setadmins] = useState(["abhinavraj.cse22@mbits.ac.in","adhilhabeeb960571@gmail.com"])
   const [user, setuser] = useState(null)
 const [admin, setadmin] = useState(false)
@@ -88,6 +96,10 @@ const [cart, setcart] = useState([])
  
  }
  
+ if (user &&cashierarr.includes(user.email) && user.email  ) {
+setcashier(true)
+
+ }
  
  }, [user])
  
@@ -120,7 +132,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill}}>
+    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart}}>
 
 {props.children}
 
