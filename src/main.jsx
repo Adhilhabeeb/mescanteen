@@ -28,6 +28,7 @@ import Addhostelers from "./pages/Addhostelers.jsx";
 import { db } from "./Firebase.js";
 import Historypage from "./pages/History.jsx";
 import MenuAddingPage from "./pages/Menuaddingpage.jsx";
+import AddDeclaredItems from "./components/Adddeclareditems.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -43,6 +44,8 @@ const router = createBrowserRouter(
       <Route path="history" element={<Historypage />} /> {/* Cart Route */}
       
       <Route path="menuadd" element={<MenuAddingPage />} /> {/* Cart Route */}
+      <Route path="adddeclared" element={<AddDeclaredItems />} /> {/* Cart Route */}
+
       
       <Route path="/wishlist" element={<WishlistPage />} />
       <Route path="*" element={<NotFound />} />
@@ -53,7 +56,7 @@ export let ourcontext =createContext()
 function Main(props) {
 
   const [hstelusertotalbill, sethstelusertotalbill] = useState(0)
-
+const [showdeclareditem, setshowdeclareditem] = useState(false)
   const [cartempty, setcartempty] = useState(false)
    const [hostelarr, sethostelarr] = useState([])
    useEffect(() => {
@@ -133,7 +136,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty}}>
+    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem}}>
 
 {props.children}
 

@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Card, Typography, Grid, Stack, Container } from "@mui/material";
 import { CheckCircle, Circle } from "@mui/icons-material"; // Icons for tick and untick
-import { declaredmenuitems } from "./dat"; // Import menu data
+// import { declaredmenuitems } from "./dat"; // Import menu data
 import { collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { ourcontext } from "../main";
 export default function MenuList() {
 
     let {admin ,hoste,cashier,user,openmenuadd,setopenmenuadd,setcartempty,cartempty}  =useContext(ourcontext)
-  
+  const [declaredmenuitems, setdeclaredmenuitems] = useState({})
   const [selectedDishes, setSelectedDishes] = useState(new Set());
   const [breakfstar, setbreakfstar] = useState([])
   const [luncharr, setluncharr] = useState([])
@@ -23,8 +23,25 @@ const [sentitems, setsentitems] = useState({
 
 const [menuItem, setMenuItem] = useState("");
   const [menuList, setMenuList] = useState([]);
+  async function fetchMenuItemexps() {
+    const querySnapshot = await getDocs(collection(db, "foodCategories"));
+    const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    let arrnnnn=[]
+// console.log(items,"oiii")
+let obj={}
+items.forEach(el=>{
+let {id,items}=el
+// console.log(id,items,"uu")
+obj[id]=items
+})
 
+// console.log(obj,"9890789698769769767965795t795t975")
+setdeclaredmenuitems(obj)
+
+  }
   useEffect(() => {
+    fetchMenuItemexps()
+    
     checkAndResetMenus(); // Reset menu if it's a new day
     fetchMenuItems(); // Fetch menu items
   }, []);
@@ -33,36 +50,41 @@ const [menuItem, setMenuItem] = useState("");
   const fetchMenuItems = async () => {
     const querySnapshot = await getDocs(collection(db, "menus"));
     const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    console.log(items,":oyyeyeyey")
+   if (items.length>0) {
+    alert("hhh")
     setMenuList(items);
 
-  console.log(items[0],"ie")
-  setbreakfstar(items[0].breakfast)
-  setluncharr(items[0].lunch)
-  setsnackarr(items[0].snacks)
-  setspecialsarr(items[0].specialFoods)
-  let mm={
-    breakfast:items[0].breakfast,
-    lunch:items[0].lunch,
-    snacks:items[0].snacks,
-    specialFoods:items[0].specialFoods
-  }
-
-  let farr=[]
-  Object.values(mm).forEach(el=>{
- el.forEach(emm=>{
-  setSelectedDishes((prev) => {
-    const newSelection = new Set(prev);
-    if (newSelection.has(emm.name)) {
-      newSelection.delete(emm.name); // Remove if already selected
-    } else {
-      newSelection.add(emm.name); // Add if not selected
+ 
+    // setbreakfstar(items[0].breakfast)
+    // setluncharr(items[0].lunch)
+    // setsnackarr(items[0].snacks)
+    // setspecialsarr(items[0].specialFoods)
+    let mm={
+      breakfast:items[0].breakfast,
+      lunch:items[0].lunch,
+      snacks:items[0].snacks,
+      specialFoods:items[0].specialFoods
     }
-    return newSelection;
-  });
- })
-
-
-  })
+  
+    let farr=[]
+    Object.values(mm).forEach(el=>{
+   el.forEach(emm=>{
+    setSelectedDishes((prev) => {
+      const newSelection = new Set(prev);
+      if (newSelection.has(emm.name)) {
+        newSelection.delete(emm.name); // Remove if already selected
+      } else {
+        newSelection.add(emm.name); // Add if not selected
+      }
+      return newSelection;
+    });
+   })
+  
+  
+    })
+   }
 
  
 
@@ -154,6 +176,8 @@ const [menuItem, setMenuItem] = useState("");
   specialFoods:specialsarr,
   snacks:snackarr
     })
+
+  // console.log(breakfstar,luncharr,specialsarr,snackarr,"arrayssettingvaues")
   }, [breakfstar,luncharr,specialsarr,snackarr])
   
 
@@ -191,7 +215,7 @@ const [menuItem, setMenuItem] = useState("");
   useEffect(() => {
   
 
-    console.log(selectedDishes,"selectedDishesselectedDishesselectedDishes")
+    // console.log(selectedDishes,"selectedDishesselectedDishesselectedDishes")
   }, [selectedDishes])
   
   return (

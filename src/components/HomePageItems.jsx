@@ -20,7 +20,7 @@ function HomePageItems() {
       }
       const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-      console.log(items[0].specialFoods,"itttee")
+      console.log(items[0],"itttee")
 
       if (items.length>0) {
       setRecipes(items[0])

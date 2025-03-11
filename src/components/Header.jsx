@@ -1,11 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CgMenuRight, CgClose } from "react-icons/cg";
 import { Link, useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
 
 function Header({ bg, p }) {
-  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd} = useContext(ourcontext);
+  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem} = useContext(ourcontext);
   const navigate = useNavigate();
+
+  
   const [menuOpen, setMenuOpen] = useState(false);
 const [addmenuopen, setaddmenuopen] = useState(false)
   // Check if user is authenticated
@@ -73,6 +75,11 @@ const [addmenuopen, setaddmenuopen] = useState(false)
            
             setopenmenuadd(!openmenuadd)
           }} className="btn bg-blue-500 px-4 py-2">Add menu</button>}
+           {admin&&  <button onClick={() => {
+            navigate("adddeclared")
+           
+            setshowdeclareditem(!showdeclareditem)
+          }} className="btn bg-blue-500 px-4 py-2">Add declared</button>}
       </nav>
 
       {/* Mobile Menu Button */}
