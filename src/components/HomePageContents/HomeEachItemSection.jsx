@@ -12,12 +12,13 @@ function HomeEachItemSection({ items, title }) {
   };
 
   return (
+   
     <div className="mx-[10%] relative">
       <h1 className="text-2xl font-black my-8 mb-6">For {title}</h1>
       <div
         className={`grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 overflow-hidden scroll-smooth scrollbar-hide pb-2 px-2`}
       >
-        {items.map((food, index) => (
+        {items?.map((food, index) => (
           <div
             className="flex flex-col gap-2 min-w-[120px] items-center cursor-pointer" // Add cursor-pointer for clicking
             key={index}

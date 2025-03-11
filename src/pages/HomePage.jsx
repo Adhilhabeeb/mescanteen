@@ -7,6 +7,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+  
     if (!localStorage.getItem("auth")) {
       navigate("/login"); // ✅ Redirect if not logged in
     }
@@ -14,8 +15,8 @@ function HomePage() {
 
   return (
     <main>
-      <HomePageHeroSection />
-      <HomePageItems />
+     <HomePageHeroSection />
+      <HomePageItems /> 
     </main>
   );
 }

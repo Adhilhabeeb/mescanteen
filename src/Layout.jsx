@@ -10,7 +10,7 @@ function Layout() {
   
   let {admin ,hoste,cashier,user,openmenuadd,setopenmenuadd}  =useContext(ourcontext)
 
-alert(openmenuadd)
+
 
   return (
     <div>
