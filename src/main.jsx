@@ -27,6 +27,7 @@ import Footer from "./components/Footer.jsx";
 import Addhostelers from "./pages/Addhostelers.jsx";
 import { db } from "./Firebase.js";
 import Historypage from "./pages/History.jsx";
+import MenuAddingPage from "./pages/Menuaddingpage.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -40,7 +41,8 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartPage />} /> {/* Cart Route */}
       <Route path="addhostel" element={<Addhostelers />} /> {/* Cart Route */}
       <Route path="history" element={<Historypage />} /> {/* Cart Route */}
-
+      
+      <Route path="menuadd" element={<MenuAddingPage />} /> {/* Cart Route */}
       
       <Route path="/wishlist" element={<WishlistPage />} />
       <Route path="*" element={<NotFound />} />
@@ -64,7 +66,7 @@ function Main(props) {
    
   const [hoste, sethoste] = useState(false)
   const [proceedcart, setproceedcart] = useState(false)
-
+const [openmenuadd, setopenmenuadd] = useState(false)
   
   const [hosteluser, sethosteluser] = useState(false)
 const [token, settoken] = useState(JSON.parse(localStorage.getItem("token")))
@@ -132,7 +134,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart}}>
+    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd}}>
 
 {props.children}
 

@@ -4,10 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
 
 function Header({ bg, p }) {
-  let { user,admin ,sethoste,hoste,hosteluser} = useContext(ourcontext);
+  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd} = useContext(ourcontext);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-
+const [addmenuopen, setaddmenuopen] = useState(false)
   // Check if user is authenticated
   const isAuthenticated = localStorage.getItem("auth");
 
@@ -68,7 +68,11 @@ function Header({ bg, p }) {
             sethoste(!hoste)
             
           }} className="btn bg-blue-500 px-4 py-2">Add hosteller</button>}
-
+ {admin&&  <button onClick={() => {
+            navigate("menuadd")
+           
+            setopenmenuadd(!openmenuadd)
+          }} className="btn bg-blue-500 px-4 py-2">Add menu</button>}
       </nav>
 
       {/* Mobile Menu Button */}
