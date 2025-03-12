@@ -4,10 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
 
 function Header({ bg, p }) {
-  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem} = useContext(ourcontext);
+  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setshowfilterorderhis,showfilterorderhis} = useContext(ourcontext);
   const navigate = useNavigate();
 
-  
+ 
   const [menuOpen, setMenuOpen] = useState(false);
 const [addmenuopen, setaddmenuopen] = useState(false)
   // Check if user is authenticated
@@ -58,14 +58,14 @@ const [addmenuopen, setaddmenuopen] = useState(false)
           }} className="btn bg-blue-500 px-4 py-2">Main</button>}
         {isAuthenticated && (
           <>
-           {!admin&&<>
+           {!admin&& !cashier && <>
            <button onClick={() => navigate("/cart")} className="btn bg-orange-500 px-4 py-2">Cart</button>
            <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 px-4 py-2">Wishlist</button></>}
             <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
           </>
         )}
 
-        {!admin&&user && <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
+        {!admin&&  !cashier &&user && <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
       }
         {!isAuthenticated && (
           <Link to="/about" className="btn border-white text-white px-4 py-2">About Us</Link>
@@ -75,6 +75,13 @@ const [addmenuopen, setaddmenuopen] = useState(false)
             sethoste(!hoste)
             
           }} className="btn bg-blue-500 px-4 py-2">Add hosteller</button>}
+{admin || cashier   && 
+  <button onClick={() => {
+    setshowfilterorderhis(!showfilterorderhis)
+
+  }} className="btn bg-blue-500 px-4 py-2">{ !showfilterorderhis?" Order History":" Cashier page"}</button>
+}
+          
  {admin&&  <button onClick={() => {
             navigate("menuadd")
            

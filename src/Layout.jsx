@@ -6,22 +6,26 @@ import Admin from "./Admin";
 import Cashier from "./pages/Cashier";
 import MenuAddingPage from "./pages/Menuaddingpage";
 import AddDeclaredItems from "./components/Adddeclareditems";
+import Filterrecentdata from "./pages/Filterrecentdata";
 
 function Layout() {
   let navigate =useNavigate()
-  let {admin ,hoste,cashier,user,openmenuadd,setopenmenuadd,showdeclareditem}  =useContext(ourcontext)
+  let {admin ,hoste,cashier,user,openmenuadd,setopenmenuadd,showdeclareditem,showfilterorderhis}  =useContext(ourcontext)
   useEffect(() => {
 if (showdeclareditem) {
 // alert("true")
 }
     }, [showdeclareditem])
 
+ 
+    
+
 
   return (
     <div>
       <Header bg="bg-blue-900" p="p-2" />
       {/* <Outlet /> ✅ This will render HomePage or Login based on route */}
-{ !hoste &&admin  ?openmenuadd?<MenuAddingPage/>:showdeclareditem ? <AddDeclaredItems key={showdeclareditem} /> : <Admin />:cashier?<Cashier/>:<Outlet />}
+{ !hoste &&admin  ?openmenuadd?<MenuAddingPage/>:showdeclareditem ? <AddDeclaredItems key={showdeclareditem} /> : <Admin />:cashier? showfilterorderhis? <Filterrecentdata/>:<Cashier/>:<Outlet />}
 {showdeclareditem&&<AddDeclaredItems key={showdeclareditem} />}
     </div>
   );
