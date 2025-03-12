@@ -12,7 +12,7 @@ function Layout() {
   let {admin ,hoste,cashier,user,openmenuadd,setopenmenuadd,showdeclareditem}  =useContext(ourcontext)
   useEffect(() => {
 if (showdeclareditem) {
-alert("true")
+// alert("true")
 }
     }, [showdeclareditem])
 

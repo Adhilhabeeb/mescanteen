@@ -53,7 +53,7 @@ setdeclaredmenuitems(obj)
 
     console.log(items,":oyyeyeyey")
    if (items.length>0) {
-    alert("hhh")
+    // alert("hhh")
     setMenuList(items);
 
  
@@ -69,21 +69,21 @@ setdeclaredmenuitems(obj)
     }
   
     let farr=[]
-    Object.values(mm).forEach(el=>{
-   el.forEach(emm=>{
-    setSelectedDishes((prev) => {
-      const newSelection = new Set(prev);
-      if (newSelection.has(emm.name)) {
-        newSelection.delete(emm.name); // Remove if already selected
-      } else {
-        newSelection.add(emm.name); // Add if not selected
-      }
-      return newSelection;
-    });
-   })
+  //   Object.values(mm).forEach(el=>{
+  //  el.forEach(emm=>{
+  //   setSelectedDishes((prev) => {
+  //     const newSelection = new Set(prev);
+  //     if (newSelection.has(emm.name)) {
+  //       newSelection.delete(emm.name); // Remove if already selected
+  //     } else {
+  //       newSelection.add(emm.name); // Add if not selected
+  //     }
+  //     return newSelection;
+  //   });
+  //  })
   
   
-    })
+  //   })
    }
 
  
@@ -188,29 +188,39 @@ setdeclaredmenuitems(obj)
   }, [sentitems])
   
 
-  function addmenuusent(catgort,item) {
-    // console.log(catgort,"ccc")
-    switch(catgort) {
+  function addmenuusent(category, item) {
+    let exists = false;
+  
+    switch (category) {
       case "breakfast":
-        // code block
-     setbreakfstar([...breakfstar,item])
+        exists = breakfstar.some((dish) => dish.name === item.name);
+        if (!exists) setbreakfstar([...breakfstar, item]);
         break;
+  
       case "lunch":
-        setluncharr([...luncharr,item])
-        // code block
+        exists = luncharr.some((dish) => dish.name === item.name);
+        if (!exists) setluncharr([...luncharr, item]);
         break;
-        case "specialFoods":
-          setspecialsarr([...specialsarr,item])
-          // code block
-          break;
-          case "snacks":
-            setsnackarr([...snackarr,item])
-            // code block
-            break;
+  
+      case "specialFoods":
+        exists = specialsarr.some((dish) => dish.name === item.name);
+        if (!exists) setspecialsarr([...specialsarr, item]);
+        break;
+  
+      case "snacks":
+        exists = snackarr.some((dish) => dish.name === item.name);
+        if (!exists) setsnackarr([...snackarr, item]);
+        break;
+  
       default:
-      //   // code block
+        break;
+    }
+  
+    if (exists) {
+      alert(`${item.name} is already in the menu.`);
     }
   }
+  
 
   useEffect(() => {
   

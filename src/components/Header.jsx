@@ -51,6 +51,11 @@ const [addmenuopen, setaddmenuopen] = useState(false)
       <nav className="hidden lg:flex items-center gap-6">
         <p className="font-bold text-white">Cafetech Corporate</p>
         <p className="font-bold text-white">Partner with us</p>
+        {admin&&  <button onClick={() => {
+            navigate("admin")
+            setopenmenuadd(false)
+            setshowdeclareditem(false)
+          }} className="btn bg-blue-500 px-4 py-2">Main</button>}
         {isAuthenticated && (
           <>
            {!admin&&<>
@@ -60,7 +65,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
           </>
         )}
 
-        {!admin&& <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
+        {!admin&&user && <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
       }
         {!isAuthenticated && (
           <Link to="/about" className="btn border-white text-white px-4 py-2">About Us</Link>
