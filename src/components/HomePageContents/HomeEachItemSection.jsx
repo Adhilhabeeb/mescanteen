@@ -32,13 +32,11 @@ function HomeEachItemSection({ items, title }) {
               <div className="flex font-bold text-sm">
                 <div className="flex items-center gap-1">
                   <TiStarFullOutline className="text-lg text-yellow-500" />
-                  <p>{food.rating}</p>
+                  <p> price{food.price}</p>
                 </div>
                 <div className="flex items-center">
                   <LuDot className="text-2xl" />
-                  <p>
-                    {food.prepTimeMinutes} - {food.prepTimeMinutes + 5} min
-                  </p>
+                  
                 </div>
               </div>
               <p>

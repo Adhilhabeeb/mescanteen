@@ -14,9 +14,11 @@ function ItemDetailPage() {
   }
 
   food.quantity = 1;
+  if (!food.price) {
+    const getRandomPrice = () => Math.floor(Math.random() * (500 - 50 + 1)) + 50;
+    food.price = getRandomPrice();
+  }
 
-  const getRandomPrice = () => Math.floor(Math.random() * (500 - 50 + 1)) + 50;
-  food.price = getRandomPrice();
 
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")) || []);
   const [wishlist, setWishlist] = useState(JSON.parse(localStorage.getItem("wishlist")) || []);

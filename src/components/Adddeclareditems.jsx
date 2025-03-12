@@ -30,6 +30,7 @@ function AddDeclaredItems() {
     difficulty: "",
     image: "",
     category: "breakfast",
+    price:""
   });
 
   const [loading, setLoading] = useState(false);
@@ -143,6 +144,7 @@ function AddDeclaredItems() {
       <TextField label="Cuisine" name="cuisine" value={formData.cuisine} onChange={handleChange} fullWidth margin="normal" />
       <TextField label="Difficulty" name="difficulty" value={formData.difficulty} onChange={handleChange} fullWidth margin="normal" />
       <TextField label="Image URL" name="image" value={formData.image} onChange={handleChange} fullWidth margin="normal" />
+      <TextField label="price" name="price" value={formData.price} onChange={handleChange} fullWidth margin="normal" />
 
       <TextField select label="Category" name="category" value={formData.category} onChange={handleChange} fullWidth margin="normal">
         {categories.map((option) => (

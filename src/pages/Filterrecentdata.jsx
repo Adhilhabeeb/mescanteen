@@ -3,12 +3,26 @@ import {
   collection, limit, onSnapshot, orderBy, query, doc, updateDoc ,where, getDocs, Timestamp
 } from "firebase/firestore";
 
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
+
+
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
+
 import Select from '@mui/material/Select';
 
+
+
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+
+import FormControl from '@mui/material/FormControl';
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import React, { useContext, useEffect, useState } from "react";
 import { db } from "../Firebase";
 
@@ -153,7 +167,8 @@ getmonthsorders(1)
   return (
   <>
 
-<Select
+<FormControl  sx={{ m: 5, minWidth: 150,width:"80%" }}>
+<Select  
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={age}
@@ -165,17 +180,72 @@ getmonthsorders(1)
           <MenuItem value={"Month"}>Month</MenuItem>
           <MenuItem value={"Year"}>Year</MenuItem>
         </Select>
+</FormControl>
   
     
     <div>Filterrecentdata</div>
 
-    { filteredaray.length>0 && filteredaray?.map((el,ind)=>(
+    {/* { filteredaray.length>0 && filteredaray?.map((el,ind)=>(
 <>   
-{`   ${ind+1}  is  the  ${ el.email}` }  <br/>
+
 
 </>
     
-    ))}
+    ))} */}
+
+<TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>#</TableCell>
+                            <TableCell>Email</TableCell>
+                            <TableCell>Created At</TableCell>
+                            <TableCell>Payment Type</TableCell>
+                            <TableCell>Foods Ordered</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {filteredaray.length > 0 ? (
+                            filteredaray.map((el, index) =>
+
+                              {
+
+                                let date;
+                                if ( typeof el.createdAt =="object") {
+                                  const timestamp = el.createdAt;
+                                  // console.log(timestamp,"9999999")
+
+ date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
+console.log(date.toLocaleString(),"jkhkdjbfckqdvcknvancvxan,vc,nxavc,nvax,ncv,nxvc,nxa,ncv,naxc"); // Format it to a readable date-time
+
+
+                                }
+                         
+
+                             return    (
+                                  <TableRow key={el.name}>
+                                      <TableCell>{index + 1}</TableCell>
+                                      <TableCell>{el.email}</TableCell>
+                                      <TableCell>{el.createdAt ?`${ typeof el.createdAt =="string"?el.createdAt:date.toLocaleString()}` : "N/A"}</TableCell>
+                                      
+                                      <TableCell>{el.paymenttype}</TableCell>
+                                      <TableCell>
+                                          {el.foods ? JSON.parse(el.foods).map(food => food.name).join(", ") : "N/A"}
+                                      </TableCell>
+                                  </TableRow>
+                              )
+                              }
+                               )
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={5} align="center">
+                                    No Data Available
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
   </>
   )
 }

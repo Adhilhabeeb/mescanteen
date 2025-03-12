@@ -10,7 +10,7 @@ import Filterrecentdata from "./pages/Filterrecentdata";
 
 function Layout() {
   let navigate =useNavigate()
-  let {admin ,hoste,cashier,user,openmenuadd,setopenmenuadd,showdeclareditem,showfilterorderhis}  =useContext(ourcontext)
+  let {admin ,hoste,cashier,user,openmenuadd,setopenmenuadd,showdeclareditem,showfilterorderhis,admnodrhstryshow}  =useContext(ourcontext)
   useEffect(() => {
 if (showdeclareditem) {
 // alert("true")
@@ -25,7 +25,7 @@ if (showdeclareditem) {
     <div>
       <Header bg="bg-blue-900" p="p-2" />
       {/* <Outlet /> ✅ This will render HomePage or Login based on route */}
-{ !hoste &&admin  ?openmenuadd?<MenuAddingPage/>:showdeclareditem ? <AddDeclaredItems key={showdeclareditem} /> : <Admin />:cashier? showfilterorderhis? <Filterrecentdata/>:<Cashier/>:<Outlet />}
+{ !hoste &&admin  ?openmenuadd?<MenuAddingPage/>:showdeclareditem ? <AddDeclaredItems key={showdeclareditem} /> : admnodrhstryshow?<Filterrecentdata/> :<Admin/> :cashier? showfilterorderhis? <Filterrecentdata/>:<Cashier/>:<Outlet />}
 {showdeclareditem&&<AddDeclaredItems key={showdeclareditem} />}
     </div>
   );

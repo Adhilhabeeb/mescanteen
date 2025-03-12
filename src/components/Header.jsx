@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
 
 function Header({ bg, p }) {
-  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setshowfilterorderhis,showfilterorderhis} = useContext(ourcontext);
+  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow} = useContext(ourcontext);
   const navigate = useNavigate();
 
  
@@ -75,13 +75,20 @@ const [addmenuopen, setaddmenuopen] = useState(false)
             sethoste(!hoste)
             
           }} className="btn bg-blue-500 px-4 py-2">Add hosteller</button>}
-{admin || cashier   && 
+{( cashier )  && 
   <button onClick={() => {
     setshowfilterorderhis(!showfilterorderhis)
 
   }} className="btn bg-blue-500 px-4 py-2">{ !showfilterorderhis?" Order History":" Cashier page"}</button>
 }
           
+{( admin )  && 
+  <button onClick={() => {
+   
+    setadmnodrhstryshow(!admnodrhstryshow)
+  }} className="btn bg-blue-500 px-4 py-2">{ admnodrhstryshow?"Admin data page" : " Order History" }</button>
+}
+         
  {admin&&  <button onClick={() => {
             navigate("menuadd")
            

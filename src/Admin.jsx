@@ -11,6 +11,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { ourcontext } from "./main";
 import { useNavigate } from "react-router-dom";
+import newStyled from "@emotion/styled";
 
 function Admin() {
   let navigate=useNavigate()
@@ -123,8 +124,18 @@ function Admin() {
           let foods = JSON.parse(order.foods);
           let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
           newTotal += orderTotal; // Add to total
+         
         }
       });
+
+      sortedMessages.forEach(order => {
+
+        if (order.hosteluser && !order.done) {
+
+          order.pendingamounttotl=newStyled
+        }
+      })
+
   // alert(newTotal)
       sethstelusertotalbill(newTotal); // Set the correct total
       setfetchedarray(sortedMessages);

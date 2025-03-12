@@ -26,6 +26,9 @@ const [menuItem, setMenuItem] = useState("");
   async function fetchMenuItemexps() {
     const querySnapshot = await getDocs(collection(db, "foodCategories"));
     const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+
+    console.log("fetchmen86586564314864586354863528642384uuuuuuuu",items)
     let arrnnnn=[]
 // console.log(items,"oiii")
 let obj={}

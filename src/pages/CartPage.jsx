@@ -183,6 +183,8 @@ await addDoc(collection(db, "canteen"),token );
 
   // Remove item from cart
   const removeItemFromCart = (itemId) => {
+
+
     const updatedCart = cartItems.filter((item) => item.id !== itemId);
     setCartItems(updatedCart);
     setcart(updatedCart)
@@ -198,13 +200,15 @@ useEffect(() => {
   const updateItemQuantity = (itemId, quantity) => {
 
 
-    console.log(itemId,quantity,"qqqq")
+    console.log(itemId,quantity,"qqqq87683754875387428")
     // quantity
     const updatedCart = cartItems.map((item) =>
-      item.id === itemId
+      item.name === itemId.name
         ? { ...item, quantity: item.quantity + quantity }
         : item
     );
+
+    
     setCartItems(updatedCart);
     setcart(updatedCart)
     localStorage.setItem("cart", JSON.stringify(updatedCart)); // Save to localStorage
@@ -268,7 +272,7 @@ useEffect(() => {
 
   return (
     <div className="p-10 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Your Cart pending bill {hstelusertotalbill} </h1>
+      <h1 className="text-3xl font-bold mb-6">Your Cart  </h1>
       {cartItems.length === 0 ? (
         <p className="text-lg">Your cart is empty!</p>
       ) : (
@@ -289,10 +293,10 @@ useEffect(() => {
                 />
                 <div className="flex-1">
                   <p className="font-semibold">{item.name}</p>
-                  <p className="text-gray-600">${item.price}</p>
+                  <p className="text-gray-600"> ₹{item.price}</p>
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={() => updateItemQuantity(item.id, -1)}
+                      onClick={() => updateItemQuantity(item, -1)}
                       className="px-2 py-1 bg-gray-200 rounded-full text-gray-600"
                       disabled={item.quantity <= 1}
                     >
@@ -300,7 +304,7 @@ useEffect(() => {
                     </button>
                     <span>{item.quantity}</span>
                     <button
-                      onClick={() => updateItemQuantity(item.id, 1)}
+                      onClick={() => updateItemQuantity(item, 1)}
                       className="px-2 py-1 bg-gray-200 rounded-full text-gray-600"
                     >
                       +
@@ -335,7 +339,7 @@ useEffect(() => {
 </Box>
           {/* Total Price */}
           <div className="flex justify-between items-center mt-6"  style={{display:"block"}}>
-            <p className="font-semibold text-xl">Total: ${calculateTotal()}</p>
+            <p className="font-semibold text-xl">Total:  ₹{calculateTotal()}</p>
            {!restricted?
             <button 
             onClick={handleCheckout}

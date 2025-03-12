@@ -61,6 +61,7 @@ function Main(props) {
 const [showdeclareditem, setshowdeclareditem] = useState(false)
   const [cartempty, setcartempty] = useState(false)
    const [hostelarr, sethostelarr] = useState([])
+   const [admnodrhstryshow, setadmnodrhstryshow] = useState(false)
    useEffect(() => {
     const q = query(collection(db, "hostelers"), orderBy("timestamp", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -138,7 +139,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis}}>
+    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow}}>
 
 {props.children}
 
