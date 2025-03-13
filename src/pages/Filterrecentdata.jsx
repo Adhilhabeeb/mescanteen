@@ -73,6 +73,8 @@ function Filterrecentdata() {
             }
           });
       // alert(newTotal)
+
+      console.log(sortedMessages,"soartyfvhdkvbkndvkh")
         setfilteredaray(sortedMessages)
           setfetchedarray(sortedMessages);
         });
@@ -116,7 +118,7 @@ function Filterrecentdata() {
     async function getRecentWeekOrders() {
         const today = new Date();
         const pastDate = new Date();
-        pastDate.setDate(today.getDate() - 1); // Get the date 7 days ago
+        pastDate.setDate(today.getDate() - 7); // Get the date 7 days ago
     
         const startTimestamp = Timestamp.fromDate(pastDate);  // Convert JS Date to Firestore Timestamp
     
@@ -137,6 +139,30 @@ function Filterrecentdata() {
 
         return orders;
     }
+    async function getyesterdayorder() {
+      const today = new Date();
+      const pastDate = new Date();
+      pastDate.setDate(today.getDate() - 1); // Get the date 7 days ago
+  
+      const startTimestamp = Timestamp.fromDate(pastDate);  // Convert JS Date to Firestore Timestamp
+  
+      const q = query(
+          collection(db, "canteen"),
+          where("createdAt", ">=", startTimestamp), // Get orders from the last 7 days
+          orderBy("createdAt", "desc")  // Sort by newest first
+      );
+  
+      const querySnapshot = await getDocs(q);
+      let orders = [];
+      querySnapshot.forEach((doc) => {
+          orders.push({ id: doc.id, ...doc.data() });
+      });
+  
+      console.log(orders ,"weekordrsss");
+      setfilteredaray(orders)
+
+      return orders;
+  }
 
 function callfetch(age) {
     switch (age) {
@@ -152,10 +178,15 @@ function callfetch(age) {
 getmonthsorders(1)
 
         break ;
-        case "Month":
+        case "Year":
             getmonthsorders(12)
             
                     break ;
+                    case "Yesterday":
+                      getyesterdayorder(1)
+                      
+                              break ;
+                    
 
         
         default:
@@ -176,9 +207,11 @@ getmonthsorders(1)
           onChange={handleChange}
         >
           <MenuItem value={"All"}>All</MenuItem>
-          <MenuItem value={"Week"}>Week</MenuItem>
-          <MenuItem value={"Month"}>Month</MenuItem>
-          <MenuItem value={"Year"}>Year</MenuItem>
+          <MenuItem value={"Yesterday"}> Yesterday</MenuItem>
+
+          <MenuItem value={"Week"}>Last Week</MenuItem>
+          <MenuItem value={"Month"}> Last Month</MenuItem>
+          <MenuItem value={"Year"}> LastYear</MenuItem>
         </Select>
 </FormControl>
   
