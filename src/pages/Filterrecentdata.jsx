@@ -142,7 +142,7 @@ function Filterrecentdata() {
     async function getyesterdayorder() {
       const today = new Date();
       const pastDate = new Date();
-      pastDate.setDate(today.getDate() - 1); // Get the date 7 days ago
+      pastDate.setDate(today.getDate() - 2); // Get the date 7 days ago
   
       const startTimestamp = Timestamp.fromDate(pastDate);  // Convert JS Date to Firestore Timestamp
   
@@ -158,7 +158,7 @@ function Filterrecentdata() {
           orders.push({ id: doc.id, ...doc.data() });
       });
   
-      console.log(orders ,"weekordrsss");
+      console.log(orders ,"yesterday");
       setfilteredaray(orders)
 
       return orders;
