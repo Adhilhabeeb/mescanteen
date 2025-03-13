@@ -47,6 +47,8 @@ const router = createBrowserRouter(
       <Route path="menuadd" element={<MenuAddingPage />} /> {/* Cart Route */}
       <Route path="adddeclared" element={<AddDeclaredItems />} /> {/* Cart Route */}
       <Route path="filtereddata" element={<Filterrecentdata />} /> {/* Cart Route */}
+     
+
 
       
       <Route path="/wishlist" element={<WishlistPage />} />
@@ -139,7 +141,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow}}>
+    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,setcashier}}>
 
 {props.children}
 

@@ -15,7 +15,7 @@ function HomePageItems() {
    const fetchMenuItems = async () => {
       const querySnapshot = await getDocs(collection(db, "menus"));
       if (!querySnapshot.docs.length>0) {
-        alert("empty")
+       
         setcartempty(true)
       }
       const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ourcontext } from "../main";
 
 function Header({ bg, p }) {
-  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow} = useContext(ourcontext);
+  let { user,admin ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setcashier,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow} = useContext(ourcontext);
   const navigate = useNavigate();
 
  
@@ -52,18 +52,22 @@ const [addmenuopen, setaddmenuopen] = useState(false)
         <p className="font-bold text-white">Cafetech Corporate</p>
         <p className="font-bold text-white">Partner with us</p>
         {admin&&  <button onClick={() => {
-            navigate("admin")
-            setopenmenuadd(false)
-            setshowdeclareditem(false)
+             setcashier(false)
+             sethoste(false)
+                             setopenmenuadd(false)
+                             setshowdeclareditem(false)
+                             setshowfilterorderhis(false)
+                             setadmnodrhstryshow(false)
           }} className="btn bg-blue-500 px-4 py-2">Main</button>}
         {isAuthenticated && (
           <>
            {!admin&& !cashier && <>
            <button onClick={() => navigate("/cart")} className="btn bg-orange-500 px-4 py-2">Cart</button>
            <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 px-4 py-2">Wishlist</button></>}
-            <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
           </>
         )}
+            <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
+
 
         {!admin&&  !cashier &&user && <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
       }
@@ -71,13 +75,22 @@ const [addmenuopen, setaddmenuopen] = useState(false)
           <Link to="/about" className="btn border-white text-white px-4 py-2">About Us</Link>
         )}
           {admin&&  <button onClick={() => {
-            navigate("addhostel")
-            sethoste(!hoste)
-            
+       setcashier(false)
+sethoste(true)
+                setopenmenuadd(false)
+                setshowdeclareditem(false)
+                setshowfilterorderhis(false)
+                setadmnodrhstryshow(false)
           }} className="btn bg-blue-500 px-4 py-2">Add hosteller</button>}
 {( cashier )  && 
   <button onClick={() => {
-    setshowfilterorderhis(!showfilterorderhis)
+
+    sethoste(false)
+                    setopenmenuadd(false)
+                    setshowdeclareditem(false)
+                    setshowfilterorderhis(!showfilterorderhis)
+                    setadmnodrhstryshow(false)
+    
 
   }} className="btn bg-blue-500 px-4 py-2">{ !showfilterorderhis?" Order History":" Cashier page"}</button>
 }
@@ -85,19 +98,35 @@ const [addmenuopen, setaddmenuopen] = useState(false)
 {( admin )  && 
   <button onClick={() => {
    
-    setadmnodrhstryshow(!admnodrhstryshow)
-  }} className="btn bg-blue-500 px-4 py-2">{ admnodrhstryshow?"Admin data page" : " Order History" }</button>
+
+    setcashier(false)
+    sethoste(false)
+                    setopenmenuadd(false)
+                    setshowdeclareditem(false)
+                    setshowfilterorderhis(false)
+                    setadmnodrhstryshow(true)
+
+
+  }} className="btn bg-blue-500 px-4 py-2">  Order History</button>
 }
          
  {admin&&  <button onClick={() => {
-            navigate("menuadd")
-           
-            setopenmenuadd(!openmenuadd)
+          
+          setcashier(false)
+          sethoste(false)
+                          setopenmenuadd(true)
+                          setshowdeclareditem(false)
+                          setshowfilterorderhis(false)
+                          setadmnodrhstryshow(false)
+         
           }} className="btn bg-blue-500 px-4 py-2">Add menu</button>}
            {admin&&  <button onClick={() => {
-            navigate("adddeclared")
-           
-            setshowdeclareditem(!showdeclareditem)
+             setcashier(false)
+             sethoste(false)
+                             setopenmenuadd(false)
+                             setshowdeclareditem(true)
+                             setshowfilterorderhis(false)
+                             setadmnodrhstryshow(false)
           }} className="btn bg-blue-500 px-4 py-2">Add declared</button>}
       </nav>
 
@@ -108,19 +137,93 @@ const [addmenuopen, setaddmenuopen] = useState(false)
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-16 right-0 w-64 bg-gray-900 p-6 rounded-lg flex flex-col items-center gap-4 shadow-lg lg:hidden">
+        <div className="absolute top-16 right-0 w-64 bg-gray-900 p-6 rounded-lg flex flex-col items-center gap-4 shadow-lg lg:hidden"  style={{zIndex:99999}}>
           <p className="font-bold text-white">Cafetech Corporate</p>
           <p className="font-bold text-white">Partner with us</p>
-          {isAuthenticated && (
+          {!admin&& !cashier && (
             <>
               <button onClick={() => navigate("/cart")} className="btn bg-orange-500 w-full px-4 py-3">Cart</button>
               <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 w-full px-4 py-3">Wishlist</button>
               <button onClick={handleLogout} className="btn bg-red-500 w-full px-4 py-3">Logout</button>
             </>
           )}
+
+
+{admin&&  <button onClick={() => {
+             setcashier(false)
+             sethoste(false)
+                             setopenmenuadd(false)
+                             setshowdeclareditem(false)
+                             setshowfilterorderhis(false)
+                             setadmnodrhstryshow(false)
+          }} className="btn bg-blue-500 px-4 py-2">Main</button>}
+
+{!admin&&  !cashier &&user && <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
+      }
+ {admin&&  <button onClick={() => {
+       setcashier(false)
+sethoste(true)
+                setopenmenuadd(false)
+                setshowdeclareditem(false)
+                setshowfilterorderhis(false)
+                setadmnodrhstryshow(false)
+          }} className="btn bg-blue-500 px-4 py-2">Add hosteller</button>}
+
+
+{( cashier )  && 
+  <button onClick={() => {
+
+    sethoste(false)
+                    setopenmenuadd(false)
+                    setshowdeclareditem(false)
+                    setshowfilterorderhis(!showfilterorderhis)
+                    setadmnodrhstryshow(false)
+    
+
+  }} className="btn bg-blue-500 px-4 py-2">{ !showfilterorderhis?" Order History":" Cashier page"}</button>
+}
+
+          
+{( admin )  && 
+  <button onClick={() => {
+   
+
+    setcashier(false)
+    sethoste(false)
+                    setopenmenuadd(false)
+                    setshowdeclareditem(false)
+                    setshowfilterorderhis(false)
+                    setadmnodrhstryshow(true)
+
+
+  }} className="btn bg-blue-500 px-4 py-2">  Order History</button>
+}
+         
+ {admin&&  <button onClick={() => {
+          
+          setcashier(false)
+          sethoste(false)
+                          setopenmenuadd(true)
+                          setshowdeclareditem(false)
+                          setshowfilterorderhis(false)
+                          setadmnodrhstryshow(false)
+         
+          }} className="btn bg-blue-500 px-4 py-2">Add menu</button>}
+           {admin&&  <button onClick={() => {
+             setcashier(false)
+             sethoste(false)
+                             setopenmenuadd(false)
+                             setshowdeclareditem(true)
+                             setshowfilterorderhis(false)
+                             setadmnodrhstryshow(false)
+          }} className="btn bg-blue-500 px-4 py-2">Add declared</button>}
+
           {!isAuthenticated && (
             <Link to="/about" className="btn border-white text-white w-full px-4 py-3">About Us</Link>
           )}
+
+<button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
+
         </div>
       )}
     </header>

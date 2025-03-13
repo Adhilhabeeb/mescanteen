@@ -31,7 +31,28 @@ function Cashier() {
   const [fetchedarray, setfetchedarray] = useState([]);
 
   useEffect(() => {
-    searchbtn();
+    // searchbtn();
+    if(tokennum.trim()==""){
+      const q = query(
+        collection(db, "canteen"),
+        orderBy("createdAt", "desc"),
+        limit(50)
+      );
+  
+      const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+        const fetchedOrders = [];
+  
+        QuerySnapshot.forEach((doc) => {
+          fetchedOrders.push({ ...doc.data(), id: doc.id });
+        });
+  
+        fetchedOrders.forEach((el) => {
+          el.createdAt = new Date(el.createdAt.seconds * 1000).toLocaleString();
+        });
+  
+        setfetchedarray(fetchedOrders);
+      });
+    }
   }, [tokennum]);
 
   useEffect(() => {
@@ -119,6 +140,9 @@ function Cashier() {
         <Table>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+            <TableCell>
+                <strong>no</strong>
+              </TableCell>
               <TableCell>
                 <strong>Token</strong>
               </TableCell>
@@ -141,12 +165,13 @@ function Cashier() {
           </TableHead>
           <TableBody>
             {fetchedarray.length > 0 ? (
-              fetchedarray.map((order) =>{
+              fetchedarray.map((order,index) =>{
                 let foods = JSON.parse(order.foods);
                 let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
 
                return  (
                 <TableRow key={order.id}>
+                   <TableCell>{index+1}</TableCell>
                   <TableCell>{order.uid}</TableCell>
                   <TableCell>{order.order}</TableCell>
                   <TableCell>

@@ -9,7 +9,7 @@ import { Box, Container, Grid, Typography, Link, IconButton, Button } from "@mui
 let limitrestrict=3
 function CartPage() {
   function generateRandom10Digit() {
-    return Math.floor(1000000000 + Math.random() * 9000000000);
+    return  Math.floor(1000 + Math.random() * 9000);
   }
   
 

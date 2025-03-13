@@ -52,7 +52,11 @@ if (sta) {
         timestamp: new Date(),
       });
       setName("");
+      setphumber("")
+      setroomnum("")
       setEmail("");
+      setdepartment("")
+    
     } catch (error) {
       console.error("Error adding document: ", error);
     }
