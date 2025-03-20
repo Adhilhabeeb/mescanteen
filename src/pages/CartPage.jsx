@@ -173,7 +173,7 @@ let orderexist=false
 let ordeexxxxxx=fetchedarray.some(el=>el.uid===tokennnid)
 
 if (ordeexxxxxx) {
-  alert("exiust")
+  alert("You are already place order")
  
   let orderfiulk=fetchedarray.filter(el=>el.uid==tokennnid)
  orderfiulk.forEach(el=>{

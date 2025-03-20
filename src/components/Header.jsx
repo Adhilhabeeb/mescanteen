@@ -84,7 +84,7 @@ setprevtok(localStorage.getItem("prevtoken"))
      setshowprevtoken(true)
     }else{
     
-      alert("done")
+    
     }
     
     }
