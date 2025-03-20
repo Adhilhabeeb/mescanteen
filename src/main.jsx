@@ -30,6 +30,7 @@ import Historypage from "./pages/History.jsx";
 import MenuAddingPage from "./pages/Menuaddingpage.jsx";
 import AddDeclaredItems from "./components/Adddeclareditems.jsx";
 import Filterrecentdata from "./pages/Filterrecentdata.jsx";
+import Showhostelerspricepoage from "./pages/showhostelerspricepoage.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -48,7 +49,7 @@ const router = createBrowserRouter(
       <Route path="adddeclared" element={<AddDeclaredItems />} /> {/* Cart Route */}
       <Route path="filtereddata" element={<Filterrecentdata />} /> {/* Cart Route */}
      
-
+      <Route path="showhostlerpending" element={<Showhostelerspricepoage />} /> {/* Cart Route */}
 
       
       <Route path="/wishlist" element={<WishlistPage />} />
@@ -72,6 +73,7 @@ const [showdeclareditem, setshowdeclareditem] = useState(false)
    }, [])
    
   const [hoste, sethoste] = useState(false)
+  const [showhostelerprpage, setshowhostelerprpage] = useState(false)
   const [proceedcart, setproceedcart] = useState(false)
 const [openmenuadd, setopenmenuadd] = useState(false)
   const [showfilterorderhis, setshowfilterorderhis] = useState(false)
@@ -141,7 +143,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,setcashier}}>
+    <ourcontext.Provider value={{items,setshowhostelerprpage,showhostelerprpage,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,setcashier}}>
 
 {props.children}
 

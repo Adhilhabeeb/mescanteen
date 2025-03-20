@@ -8,6 +8,7 @@ import MenuAddingPage from "./pages/Menuaddingpage";
 import AddDeclaredItems from "./components/Adddeclareditems";
 import Filterrecentdata from "./pages/Filterrecentdata";
 import AddHostelers from "./pages/Addhostelers";
+import Showhostelerspricepoage from "./pages/showhostelerspricepoage";
 
 function Layout() {
   let navigate = useNavigate();
@@ -21,6 +22,8 @@ function Layout() {
     showdeclareditem,
     showfilterorderhis,
     admnodrhstryshow,
+    showhostelerprpage
+
   } = useContext(ourcontext);
   useEffect(() => {
     if (showdeclareditem) {
@@ -84,6 +87,7 @@ function Layout() {
    // Adddeclared item page showing  
   showdeclareditem?
   <AddDeclaredItems/>:
+  showhostelerprpage?<Showhostelerspricepoage/>:
   <Admin/>
       
       

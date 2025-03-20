@@ -12,6 +12,7 @@ function CartPage() {
     return  Math.floor(1000 + Math.random() * 9000);
   }
   
+  const [tokennnid, settokennnid] = useState(null)
 
   
   const [fetchedarray, setfetchedarray] = useState([])
@@ -26,17 +27,18 @@ setproceedcart}=useContext(ourcontext)
   ///////
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
-
 useEffect(() => {
  
 
 
   if (user  && cart && paymenttype) {
 
-    console.log(cart,"carrtyujk")
+    // console.log(cart,"carrtyujk")
     let {uid,email}=user
+    let tokenid=generateRandom10Digit()
+    settokennnid(tokenid)
    settoken({
-    uid:generateRandom10Digit(),email,foods:JSON.stringify(cart),
+    uid: tokenid ,email,foods:JSON.stringify(cart),
 
        createdAt: serverTimestamp(),
    
@@ -55,7 +57,7 @@ hosteluser
 }, [cart,user,paymenttype])
 
 useEffect(() => {
- console.log(JSON.parse(localStorage.getItem("cart")),"cccccc")
+//  console.log(JSON.parse(localStorage.getItem("cart")),"cccccc")
 //  setcart(JSON.parse(localStorage.getItem("cart")))
 } )
 
@@ -66,7 +68,7 @@ useEffect(() => {
   if (loca) {
     setCartItems(JSON.parse(loca))
 setcart(JSON.parse(loca))
-console.log(loca,"looocartyh")
+// console.log(loca,"looocartyh")
   }
 
 
@@ -109,6 +111,12 @@ const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
   setfetchedarray(sortedMessages);
 });
 
+
+
+
+
+
+
 return () => unsubscribe();
 
 
@@ -123,7 +131,7 @@ return () => unsubscribe();
 
       
    let newar=   fetchedarray?.filter(e=>{
-    console.log(e,"eeee",user)
+    // console.log(e,"eeee",user)
 
 return e.email==user.email  && !e.done &&!e.hosteluser
       })
@@ -134,24 +142,63 @@ if (newar.length>limitrestrict) {
 }
      
 
+
+
     }, [fetchedarray])
     
 
     useEffect(() => {
      
 
-      console.log(restricted,"refhvne")
+      // console.log(restricted,"refhvne")
     }, [restricted])
     
   // Handle checkout
   const handleCheckout = () => {
+    // alert(hosteluser+"and"+token.hosteluser)
+
+
+// return
     // You can add payment gateway logic or navigate to a checkout page
     // alert("Proceeding to checkout!");
+// fetchedarray.forEach(el=>{
+// if (el.uid) {
+//   console.log(el.uid,"and",tokennnid)
+// }
+// })
+console.log(token,"ttoiolooo")
+
+let orderexist=false
+
+let ordeexxxxxx=fetchedarray.some(el=>el.uid===tokennnid)
+
+if (ordeexxxxxx) {
+  alert("exiust")
+ 
+  let orderfiulk=fetchedarray.filter(el=>el.uid==tokennnid)
+ orderfiulk.forEach(el=>{
+
+if (!el.done) {
+
+  console.log(token,"illa",el)
+ 
+}else{
+  console.log(token,"ond",el)
+}
+ })
+  console.log(orderfiulk,"ookuoihkihgjkgjg")
+  return
+}
+
+if (token) {
+  localStorage.setItem("prevtoken",JSON.stringify(token))
+  }
+  
 
 sendMessage()
 setproceedcart(true)
 localStorage.removeItem("cart")
-
+navigate("/token")
 
     // Example: navigate('/checkout'); // Uncomment to navigate to checkout page
   };
@@ -169,7 +216,7 @@ if (!cart) {
   return
 }
 if (token) {
- console.log(token,"yyy")
+//  console.log(token,"yyy")
 }
 
 
@@ -200,7 +247,7 @@ useEffect(() => {
   const updateItemQuantity = (itemId, quantity) => {
 
 
-    console.log(itemId,quantity,"qqqq87683754875387428")
+    // console.log(itemId,quantity,"qqqq87683754875387428")
     // quantity
     const updatedCart = cartItems.map((item) =>
       item.name === itemId.name

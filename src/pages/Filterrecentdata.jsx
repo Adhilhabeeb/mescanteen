@@ -115,6 +115,37 @@ function Filterrecentdata() {
     }
       
 
+    async function getTodayOrders() {
+      const today = new Date();
+      
+      // Set start of the day (00:00:00)
+      const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+      const startTimestamp = Timestamp.fromDate(startOfDay);
+    
+      // Set end of the day (23:59:59)
+      const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+      const endTimestamp = Timestamp.fromDate(endOfDay);
+    
+      const q = query(
+        collection(db, "canteen"),
+        where("createdAt", ">=", startTimestamp),
+        where("createdAt", "<=", endTimestamp),
+        orderBy("createdAt", "desc") // Newest first
+      );
+    
+      const querySnapshot = await getDocs(q);
+      let orders = [];
+      querySnapshot.forEach((doc) => {
+        orders.push({ id: doc.id, ...doc.data() });
+      });
+    
+      console.log(orders, "Today's Orders");
+      setfilteredaray(orders); // Ensure this is correctly defined in your component state
+    
+      return orders;
+    }
+
+
     async function getRecentWeekOrders() {
         const today = new Date();
         const pastDate = new Date();
@@ -142,7 +173,7 @@ function Filterrecentdata() {
     async function getyesterdayorder() {
       const today = new Date();
       const pastDate = new Date();
-      pastDate.setDate(today.getDate() - 2); // Get the date 7 days ago
+      pastDate.setDate(today.getDate() - 1); // Get the date 7 days ago
   
       const startTimestamp = Timestamp.fromDate(pastDate);  // Convert JS Date to Firestore Timestamp
   
@@ -186,6 +217,10 @@ getmonthsorders(1)
                       getyesterdayorder(1)
                       
                               break ;
+                              case "Today":
+                                getTodayOrders(1)
+                                
+                                        break ;
                     
 
         
@@ -207,6 +242,7 @@ getmonthsorders(1)
           onChange={handleChange}
         >
           <MenuItem value={"All"}>All</MenuItem>
+          <MenuItem value={"Today"}>Today</MenuItem>
           <MenuItem value={"Yesterday"}> Yesterday</MenuItem>
 
           <MenuItem value={"Week"}>Last Week</MenuItem>

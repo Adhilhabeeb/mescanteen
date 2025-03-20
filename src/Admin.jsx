@@ -100,8 +100,7 @@ function Admin() {
   useEffect(() => {
     const q = query(
       collection(db, "canteen"),
-      orderBy("createdAt", "desc"),
-      limit(50)
+      orderBy("createdAt", "desc")
     );
   
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
@@ -132,7 +131,7 @@ function Admin() {
 
         if (order.hosteluser && !order.done) {
 
-          order.pendingamounttotl=newStyled
+          alert("hhhh")
         }
       })
 
@@ -227,6 +226,7 @@ return prev=totalofflinepayment+totalonlinepayment
               <TableCell><strong>Payment</strong></TableCell>
               <TableCell><strong>Actions</strong></TableCell>
               <TableCell><strong>Status</strong></TableCell>
+              <TableCell><strong>Markpaid</strong></TableCell>
               <TableCell><strong>hosteller</strong></TableCell>
 
             </TableRow>
