@@ -219,7 +219,7 @@ return prev=totalofflinepayment+totalonlinepayment
         <Table>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-              <TableCell><strong>Order ID</strong></TableCell>
+              <TableCell><strong>Order ID </strong></TableCell>
               <TableCell><strong>Email</strong></TableCell>
               <TableCell><strong>Date</strong></TableCell>
               <TableCell><strong>Total Price</strong></TableCell>
