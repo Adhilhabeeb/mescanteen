@@ -94,14 +94,14 @@ function ItemDetailPage() {
                 Add to Cart 🛒
               </Button>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            {/* <Grid item xs={12} sm={4}>
               <Button fullWidth variant="contained" color="secondary" onClick={addToWishlist}>
                 Add to Wishlist ❤️
               </Button>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={4}>
               <Button fullWidth variant="contained" color="success" onClick={buyNow}>
-                Buy Now 🛍️
+                Buy Now <br/> 🛍️
               </Button>
             </Grid>
           </Grid>

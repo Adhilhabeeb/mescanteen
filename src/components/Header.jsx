@@ -175,6 +175,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
         {!isAuthenticated && (
           <Link to="/about" className="btn border-white text-white px-4 py-2">About Us</Link>
         )}
+        
           {admin&&  <button onClick={() => {
        setcashier(false)
 sethoste(true)
@@ -251,7 +252,7 @@ sethoste(true)
           {!admin&& !cashier && (
             <>
               <button onClick={() => navigate("/cart")} className="btn bg-orange-500 w-full px-4 py-3">Cart</button>
-              <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 w-full px-4 py-3">Wishlist</button>
+              {/* <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 w-full px-4 py-3">Wishlist</button> */}
               <button onClick={handleLogout} className="btn bg-red-500 w-full px-4 py-3">Logout</button>
             </>
           )}
@@ -340,9 +341,18 @@ sethoste(true)
             <Link to="/about" className="btn border-white text-white w-full px-4 py-3">About Us</Link>
           )}
 
-{showprevtoken && (
-            <Link to="" className="btn border-white text-white w-full px-4 py-3"> show prev token</Link>
-          )}
+{admin&&  <button onClick={() => {
+             setcashier(false)
+             sethoste(false)
+                             setopenmenuadd(false)
+                             setshowdeclareditem(false)
+                             setshowfilterorderhis(false)
+                             setadmnodrhstryshow(false)
+                             setshowhostelerprpage(true)
+                            
+          }} className="btn bg-blue-500 px-4 py-2">show hostelers pending</button>}
+          {showprevtoken&& <button onClick={() => navigate(`/token?value=${prevtok}`)} className="btn bg-orange-500 px-4 py-2">Show Prev Token</button>}
+
 
 <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
 
