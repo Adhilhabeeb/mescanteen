@@ -233,36 +233,65 @@ setdeclaredmenuitems(obj)
   
   return (
     <Container>
-      {Object.entries(declaredmenuitems).map(([category, items]) => (
-        <div key={category}>
-          <Typography variant="h5" sx={{ mt: 2, mb: 1, fontWeight: "bold", textTransform: "capitalize" }}>
-            {category.replace(/([A-Z])/g, " $1")} {/* Format category names */}
-          </Typography>
-          <Grid container spacing={2}>
-            {items.map((dish) => (
-              <Grid item xs={12} sm={6} md={4} key={dish.id}>
-                <Card sx={{ p: 2, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <img src={dish.image} alt={dish.name} width={100} />
-                  <Typography variant="h6">{dish.name}</Typography>
-                  <Button variant="outlined" onClick={() => {
-  handleToggle(dish);
-  addmenuusent(category, dish);
-}} sx={{ mt: 1 }}>
-  {selectedDishes.has(dish.name) ? <CheckCircle /> : <Circle />} Select
-</Button>
+    {Object.entries(declaredmenuitems).map(([category, items]) => (
+      <div key={category}>
+        <Typography
+          variant="h5"
+          sx={{ mt: 2, mb: 1, fontWeight: "bold", textTransform: "capitalize" }}
+        >
+          {category.replace(/([A-Z])/g, " $1")}
+        </Typography>
 
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-         
-        </div>
-      ))}
-       <Button   variant="contained" onClick={addMenuItem}>
+        <Grid container spacing={2}>
+          {items.map((dish) => (
+            <Grid item xs={12} sm={6} md={4} key={dish.id}>
+              <Card
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                <img
+                  src={dish.image}
+                  alt={dish.name}
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Typography variant="h6" sx={{ mt: 1 }}>
+                  {dish.name}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    handleToggle(dish);
+                    addmenuusent(category, dish);
+                  }}
+                  sx={{ mt: 1 }}
+                >
+                  {selectedDishes.has(dish.name) ? <CheckCircle /> : <Circle />} Select
+                </Button>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+    ))}
 
-sent our dishes
-</Button>
-    </Container>
+    <Button
+      variant="contained"
+      onClick={addMenuItem}
+      sx={{ mt: 3, display: "block", mx: "auto" }}
+    >
+      Send Our Dishes
+    </Button>
+  </Container>
   );
 }
 

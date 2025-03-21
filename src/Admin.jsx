@@ -131,7 +131,7 @@ function Admin() {
 
         if (order.hosteluser && !order.done) {
 
-          alert("hhhh")
+          // alert("hhhh")
         }
       })
 
@@ -210,7 +210,7 @@ return prev=totalofflinepayment+totalonlinepayment
 
   return (
     <>
-      <TableContainer component={Paper} sx={{ maxWidth: 900, margin: "auto", mt: 3 }}>
+      <TableContainer component={Paper} sx={{ maxWidth: "90%", margin: "auto", mt: 3 }}>
         <Box width={"100%"} minHeight={"5vh"} height={"auto"} display={'flex'} justifyContent={"space-around"} p={2}>
           <Typography variant="p">Money Received: ₹{totalbudgey}</Typography>
           <Typography variant="p">Online Payment Received: ₹{totalonlinepayment}</Typography>
@@ -247,7 +247,9 @@ return prev=totalofflinepayment+totalonlinepayment
                     <TableCell>{order.createdAt}</TableCell>
                     <TableCell>₹{totalPrice}</TableCell>
                     <TableCell>{order.paymenttype}</TableCell>
+                    <TableCell>
 {order.hosteluser && hstelusertotalbill  &&<h1> crt pending {hstelusertotalbill}</h1>}
+</TableCell>
                     <TableCell>
                       <IconButton onClick={() => setExpanded(prev => ({ ...prev, [order.id]: !prev[order.id] }))}>
                         {expanded[order.id] ? <ExpandLessIcon /> : <ExpandMoreIcon />}

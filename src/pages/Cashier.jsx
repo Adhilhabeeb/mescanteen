@@ -31,33 +31,31 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 function Cashier() {
   const [tokennum, settokennum] = useState("");
   const [fetchedarray, setfetchedarray] = useState([]);
-  const [openRows, setOpenRows] = useState({}); // Track which row is open
+  const [openRows, setOpenRows] = useState({});
 
   useEffect(() => {
-    if (tokennum.trim() === "") {
-      const q = query(
-        collection(db, "canteen"),
-        orderBy("createdAt", "desc"),
-        limit(50)
-      );
+    const q = query(
+      collection(db, "canteen"),
+      orderBy("createdAt", "desc"),
+      limit(50)
+    );
 
-      const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-        const fetchedOrders = [];
+    const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+      const fetchedOrders = [];
 
-        QuerySnapshot.forEach((doc) => {
-          fetchedOrders.push({ ...doc.data(), id: doc.id });
-        });
-
-        fetchedOrders.forEach((el) => {
-          el.createdAt = new Date(el.createdAt.seconds * 1000).toLocaleString();
-        });
-
-        setfetchedarray(fetchedOrders);
+      QuerySnapshot.forEach((doc) => {
+        fetchedOrders.push({ ...doc.data(), id: doc.id });
       });
 
-      return () => unsubscribe();
-    }
-  }, [tokennum]);
+      fetchedOrders.forEach((el) => {
+        el.createdAt = new Date(el.createdAt.seconds * 1000).toLocaleString();
+      });
+
+      setfetchedarray(fetchedOrders);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const markAsPaid = async (orderId) => {
     const orderRef = doc(db, "canteen", orderId);
@@ -65,46 +63,25 @@ function Cashier() {
     window.location.reload();
   };
 
-  function searchbtn() {
+  const searchbtn = () => {
     if (tokennum.trim() === "") {
-      const q = query(
-        collection(db, "canteen"),
-        orderBy("createdAt", "desc"),
-        limit(50)
-      );
-
-      const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
-        const fetchedOrders = [];
-
-        QuerySnapshot.forEach((doc) => {
-          fetchedOrders.push({ ...doc.data(), id: doc.id });
-        });
-
-        fetchedOrders.forEach((el) => {
-          el.createdAt = new Date(el.createdAt.seconds * 1000).toLocaleString();
-        });
-
-        setfetchedarray(fetchedOrders);
-      });
-
-      return () => unsubscribe();
-    } else {
-      let filteredOrders = fetchedarray.filter((el) => el.uid == tokennum);
-      setfetchedarray(filteredOrders);
+      return;
     }
-  }
+    const filteredOrders = fetchedarray.filter((el) => el.uid === tokennum);
+    setfetchedarray(filteredOrders);
+  };
 
   const toggleRow = (id) => {
     setOpenRows((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
-    <Box sx={{ maxWidth: 900, margin: "auto", textAlign: "center", p: 2 }}>
-      <Typography variant="h4" sx={{ mb: 2 }}>
+    <Box sx={{ maxWidth: 1000, margin: "auto", textAlign: "center", p: 3 }}>
+      <Typography variant="h4" sx={{ mb: 3 }}>
         Cashier Dashboard
       </Typography>
 
-      <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 2 }}>
+      <Box sx={{ display: "flex", gap: 2, justifyContent: "center", mb: 3 }}>
         <TextField
           label="Search by Token Number"
           variant="outlined"
@@ -121,24 +98,26 @@ function Cashier() {
         <Table>
           <TableHead>
             <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-              <TableCell />
-              <TableCell>
-                <strong>No</strong>
+              <TableCell align="center" sx={{ width: "5%" }}>
+                #
               </TableCell>
-              <TableCell>
-                <strong>Token</strong>
+              <TableCell align="center" sx={{ width: "10%" }}>
+                Token
               </TableCell>
-              <TableCell>
-                <strong>Payment Status</strong>
+              <TableCell align="center" sx={{ width: "15%" }}>
+                Payment Status
               </TableCell>
-              <TableCell>
-                <strong>Action</strong>
+              <TableCell align="center" sx={{ width: "15%" }}>
+               
               </TableCell>
-              <TableCell>
-                <strong>Hostler</strong>
+              <TableCell align="center" sx={{ width: "10%" }}>
+                Details
               </TableCell>
-              <TableCell>
-                <strong>Amount</strong>
+              <TableCell align="center" sx={{ width: "10%" }}>
+                Hostler
+              </TableCell>
+              <TableCell align="center" sx={{ width: "15%" }}>
+                Amount
               </TableCell>
             </TableRow>
           </TableHead>
@@ -154,18 +133,9 @@ function Cashier() {
                 return (
                   <React.Fragment key={order.id}>
                     <TableRow>
-                      <TableCell>
-                        <IconButton onClick={() => toggleRow(order.id)}>
-                          {openRows[order.id] ? (
-                            <KeyboardArrowUp />
-                          ) : (
-                            <KeyboardArrowDown />
-                          )}
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{order.uid}</TableCell>
-                      <TableCell>
+                      <TableCell align="center">{index + 1}</TableCell>
+                      <TableCell align="center">{order.uid}</TableCell>
+                      <TableCell align="center">
                         {order.done ? (
                           <Typography color="green">
                             <CheckCircleIcon sx={{ verticalAlign: "middle" }} />{" "}
@@ -180,7 +150,7 @@ function Cashier() {
                           </Typography>
                         )}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
                         {!order.done && (
                           <Button
                             variant="contained"
@@ -191,7 +161,16 @@ function Cashier() {
                           </Button>
                         )}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="center">
+                        <IconButton onClick={() => toggleRow(order.id)}>
+                          {openRows[order.id] ? (
+                            <KeyboardArrowUp />
+                          ) : (
+                            <KeyboardArrowDown />
+                          )}
+                        </IconButton>
+                      </TableCell>
+                      <TableCell align="center">
                         {order.hosteluser ? (
                           <Button variant="contained" color="success">
                             Hosteler
@@ -202,7 +181,7 @@ function Cashier() {
                           </Button>
                         )}
                       </TableCell>
-                      <TableCell>₹{orderTotal}</TableCell>
+                      <TableCell align="center">₹{orderTotal}</TableCell>
                     </TableRow>
 
                     {/* Collapsible Row for Food Items */}
@@ -214,25 +193,29 @@ function Cashier() {
                             <Table size="small">
                               <TableHead>
                                 <TableRow>
-                                  <TableCell>Image</TableCell>
-                                  <TableCell>Item</TableCell>
-                                  <TableCell>Quantity</TableCell>
-                                  <TableCell>Price</TableCell>
+                                  <TableCell align="center">Image</TableCell>
+                                  <TableCell align="center">Item</TableCell>
+                                  <TableCell align="center">Quantity</TableCell>
+                                  <TableCell align="center">Price</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
                                 {foods.map((food, idx) => (
                                   <TableRow key={idx}>
-                                    <TableCell>
+                                    <TableCell align="center">
                                       <img
                                         src={food.image}
                                         alt={food.name}
-                                        style={{ width: 50, height: 50, borderRadius: 5 }}
+                                        style={{
+                                          width: 50,
+                                          height: 50,
+                                          borderRadius: 5,
+                                        }}
                                       />
                                     </TableCell>
-                                    <TableCell>{food.name}</TableCell>
-                                    <TableCell>{food.quantity}</TableCell>
-                                    <TableCell>₹{food.price * food.quantity}</TableCell>
+                                    <TableCell align="center">{food.name}</TableCell>
+                                    <TableCell align="center">{food.quantity}</TableCell>
+                                    <TableCell align="center">₹{food.price * food.quantity}</TableCell>
                                   </TableRow>
                                 ))}
                               </TableBody>
