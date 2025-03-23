@@ -27,9 +27,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { db } from "../Firebase";
 
 
+
 function Filterrecentdata() {
     const [age, setAge] = React.useState('');
-
+const [nodata, setnodata] = useState(false)
     const handleChange = (event) => {
       setAge(event.target.value);
     };
@@ -107,7 +108,11 @@ function Filterrecentdata() {
         querySnapshot.forEach((doc) => {
             orders.push({ id: doc.id, ...doc.data() });
         });
-    
+        if(orders.length==0){
+          setnodata(true)
+         }else{
+          setnodata(false)
+         }
         console.log(orders,"months order");
         setfilteredaray(orders)
 
@@ -138,7 +143,11 @@ function Filterrecentdata() {
       querySnapshot.forEach((doc) => {
         orders.push({ id: doc.id, ...doc.data() });
       });
-    
+      if(orders.length==0){
+        setnodata(true)
+       }else{
+        setnodata(false)
+       }
       console.log(orders, "Today's Orders");
       setfilteredaray(orders); // Ensure this is correctly defined in your component state
     
@@ -164,7 +173,11 @@ function Filterrecentdata() {
         querySnapshot.forEach((doc) => {
             orders.push({ id: doc.id, ...doc.data() });
         });
-    
+        if(orders.length==0){
+          setnodata(true)
+         }else{
+          setnodata(false)
+         }
         console.log(orders ,"weekordrsss");
         setfilteredaray(orders)
 
@@ -190,6 +203,11 @@ function Filterrecentdata() {
       });
   
       console.log(orders ,"yesterday");
+      if(orders.length==0){
+        setnodata(true)
+       }else{
+        setnodata(false)
+       }
       setfilteredaray(orders)
 
       return orders;
@@ -262,7 +280,7 @@ getmonthsorders(1)
     
     ))} */}
 
-<TableContainer component={Paper}>
+{  !nodata? <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -314,7 +332,7 @@ console.log(date.toLocaleString(),"jkhkdjbfckqdvcknvancvxan,vc,nxavc,nvax,ncv,nx
                         )}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer> :<h3 style={{textAlign:"center"}} >No orders found</h3>}
   </>
   )
 }

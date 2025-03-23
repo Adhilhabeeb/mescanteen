@@ -71,6 +71,8 @@ setdeclaredmenuitems(obj)
       specialFoods:items[0].specialFoods
     }
   
+
+  
     let farr=[]
   //   Object.values(mm).forEach(el=>{
   //  el.forEach(emm=>{
@@ -180,7 +182,7 @@ setdeclaredmenuitems(obj)
   snacks:snackarr
     })
 
-  // console.log(breakfstar,luncharr,specialsarr,snackarr,"arrayssettingvaues")
+  console.log(breakfstar,luncharr,"special:",specialsarr,snackarr,"arrayssettingvaues")
   }, [breakfstar,luncharr,specialsarr,snackarr])
   
 
@@ -192,6 +194,7 @@ setdeclaredmenuitems(obj)
   
 
   function addmenuusent(category, item) {
+    alert(category)
     let exists = false;
   
     switch (category) {
@@ -205,7 +208,9 @@ setdeclaredmenuitems(obj)
         if (!exists) setluncharr([...luncharr, item]);
         break;
   
-      case "specialFoods":
+      case "specialfood":
+
+      alert("specviusl")
         exists = specialsarr.some((dish) => dish.name === item.name);
         if (!exists) setspecialsarr([...specialsarr, item]);
         break;

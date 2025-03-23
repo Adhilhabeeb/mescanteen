@@ -113,7 +113,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
   };
 
   return (
-    <header className={`flex items-center justify-between ${bg || "bg-transparent"} sm:px-[10%] ${p || "p-6"}`}>
+    <header  className={`flex items-center justify-between ${bg || "bg-transparent"} sm:px-[0%] ${p || "p-6"}`}>
       <h1 className="text-white font-extrabold text-3xl sm:text-5xl italic font-serif py-1 sm:p-2">
         Cafetech
       </h1>
@@ -134,7 +134,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
       )}
 
       {/* Desktop Menu */}
-      <nav className="hidden lg:flex items-center gap-6">
+      <nav className="hidden lg:flex items-center gap-4">
         <p className="font-bold text-white">Cafetech Corporate</p>
         <p className="font-bold text-white">Partner with us</p>
         {admin&&  <button onClick={() => {
@@ -156,7 +156,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
                              setadmnodrhstryshow(false)
                              setshowhostelerprpage(true)
                             
-          }} className="btn bg-blue-500 px-4 py-2">show hostelers pending</button>}
+          }} className="btn bg-blue-500  py-2" style={{display:"inline",boxSizing:"border-box",width:"40vh"}}>show hostelers pending</button>}
 
         {isAuthenticated && (
           <>
@@ -164,7 +164,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
            <button onClick={() => navigate("/cart")} className="btn bg-orange-500 px-4 py-2">Cart</button>
 
 {showprevtoken&& <button onClick={() => navigate(`/token?value=${prevtok}`)} className="btn bg-orange-500 px-4 py-2">Show Prev Token</button>}
-           <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 px-4 py-2">Wishlist</button></>}
+          </>}
           </>
         )}
             <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
