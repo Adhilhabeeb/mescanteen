@@ -1,5 +1,5 @@
 import { 
-  collection, limit, onSnapshot, orderBy, query, doc, updateDoc 
+  collection, limit, onSnapshot, orderBy, query, doc, updateDoc , where, getDocs
 } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { db } from "./Firebase";
@@ -14,6 +14,10 @@ import { useNavigate } from "react-router-dom";
 import newStyled from "@emotion/styled";
 
 function Admin() {
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+
   let navigate=useNavigate()
     let {user,setuser,sethstelusertotalbill,hstelusertotalbill}=useContext(ourcontext)
   useEffect(() => {
@@ -208,10 +212,81 @@ return prev=totalofflinepayment+totalonlinepayment
     }
   };
 
+  const fetchOrders = async () => {
+   
+    if (!fromDate || !toDate) {
+      alert("Please select both dates.");
+      return;
+    }
+
+    const fromTimestamp = new Date(fromDate);
+    const toTimestamp = new Date(toDate);
+
+    try {
+      const ordersRef = collection(db, "canteen");
+      const q = query(
+        ordersRef,
+        where("createdAt", ">=", fromTimestamp),
+        where("createdAt", "<=", toTimestamp)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const filteredOrders = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      console.log(filteredOrders,"filtiyewgihfgvkndvfkn8364987311497139749713")
+
+      let newTotal = 0;
+      let onlinepay = 0;
+      let offlinepay = 0;
+  
+      filteredOrders.forEach(order => {
+  
+       
+        let foods = JSON.parse(order.foods);
+        let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+        newTotal += orderTotal;
+  if (order.done) {
+    if (order.paymenttype === "online") {
+      onlinepay += orderTotal;
+    } else {
+      offlinepay += orderTotal;
+    }
+  }
+       
+      });
+  
+    
+      settotalonlinepayment(onlinepay);
+      settotalofflinepayment(offlinepay);
+  
+      
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
   return (
     <>
       <TableContainer component={Paper} sx={{ maxWidth: "90%", margin: "auto", mt: 3 }}>
         <Box width={"100%"} minHeight={"5vh"} height={"auto"} display={'flex'} justifyContent={"space-around"} p={2}>
+        <input
+        type="date"
+        value={fromDate}
+        onChange={(e) => {setFromDate(e.target.value)
+
+          
+        }}
+      />
+      <input
+        type="date"
+        value={toDate}
+        onChange={(e) => {setToDate(e.target.value)
+          
+        }}
+      />
+       <button className="btn bg-blue-500  py-2 px-2" onClick={fetchOrders}> Filter Date wise </button>
           <Typography variant="p">Money Received: ₹{totalbudgey}</Typography>
           <Typography variant="p">Online Payment Received: ₹{totalonlinepayment}</Typography>
           <Typography variant="p">Offline Payment Received: ₹{totalofflinepayment}</Typography>

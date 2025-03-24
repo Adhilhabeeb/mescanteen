@@ -5,7 +5,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, provider,signInWithPopup } from "../Firebase";
 import { ourcontext } from "../main";
 function Login() {
-  let {user,setuser}=useContext(ourcontext)
+
+  
+  let {user,setuser,loginpa,setloginpa}=useContext(ourcontext)
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +21,12 @@ function Login() {
     }
   }, [navigate]);
 
+  useEffect(() => {
+   
+    setloginpa(true)
+    return () =>{setloginpa(false) };
+  }, [])
+  
   const handleLoginem = (e) => {
     e.preventDefault();
 

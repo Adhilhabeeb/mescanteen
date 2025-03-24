@@ -194,7 +194,7 @@ setdeclaredmenuitems(obj)
   
 
   function addmenuusent(category, item) {
-    alert(category)
+
     let exists = false;
   
     switch (category) {
@@ -210,7 +210,7 @@ setdeclaredmenuitems(obj)
   
       case "specialfood":
 
-      alert("specviusl")
+    
         exists = specialsarr.some((dish) => dish.name === item.name);
         if (!exists) setspecialsarr([...specialsarr, item]);
         break;

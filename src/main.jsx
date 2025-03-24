@@ -59,7 +59,7 @@ const router = createBrowserRouter(
 );
 export let ourcontext =createContext()
 function Main(props) {
-
+const [loginpa, setloginpa] = useState(false)
   const [hstelusertotalbill, sethstelusertotalbill] = useState(0)
 const [showdeclareditem, setshowdeclareditem] = useState(false)
   const [cartempty, setcartempty] = useState(false)
@@ -143,7 +143,7 @@ setuser(authuser)
  
 
   return(
-    <ourcontext.Provider value={{items,setshowhostelerprpage,showhostelerprpage,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,setcashier}}>
+    <ourcontext.Provider value={{items,setshowhostelerprpage,showhostelerprpage,setitems,cart,setcart,user,setuser,admin,setadmins,admins,settoken,token,sethoste,hoste,sethostelarr,hostelarr,hosteluser,sethstelusertotalbill,hstelusertotalbill,cashier,setproceedcart,setopenmenuadd,openmenuadd,setcartempty,cartempty,setshowdeclareditem,showdeclareditem,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,setcashier,setloginpa,loginpa}}>
 
 {props.children}
 

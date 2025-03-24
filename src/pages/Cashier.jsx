@@ -32,7 +32,30 @@ function Cashier() {
   const [tokennum, settokennum] = useState("");
   const [fetchedarray, setfetchedarray] = useState([]);
   const [openRows, setOpenRows] = useState({});
-
+  useEffect(() => {
+    // searchbtn();
+    if(tokennum.trim()==""){
+      const q = query(
+        collection(db, "canteen"),
+        orderBy("createdAt", "desc"),
+        limit(50)
+      );
+  
+      const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+        const fetchedOrders = [];
+  
+        QuerySnapshot.forEach((doc) => {
+          fetchedOrders.push({ ...doc.data(), id: doc.id });
+        });
+  
+        fetchedOrders.forEach((el) => {
+          el.createdAt = new Date(el.createdAt.seconds * 1000).toLocaleString();
+        });
+  
+        setfetchedarray(fetchedOrders);
+      });
+    }
+  }, [tokennum]);
   useEffect(() => {
     const q = query(
       collection(db, "canteen"),
@@ -60,16 +83,42 @@ function Cashier() {
   const markAsPaid = async (orderId) => {
     const orderRef = doc(db, "canteen", orderId);
     await updateDoc(orderRef, { done: true });
-    window.location.reload();
+    // window.location.reload();
   };
 
-  const searchbtn = () => {
-    if (tokennum.trim() === "") {
-      return;
+ 
+
+  function searchbtn() {
+    if (tokennum.trim()=="") {
+        const q = query(
+            collection(db, "canteen"),
+            orderBy("createdAt", "desc"),
+            limit(50)
+          );
+      
+          const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
+            const fetchedOrders = [];
+      
+            QuerySnapshot.forEach((doc) => {
+              fetchedOrders.push({ ...doc.data(), id: doc.id });
+            });
+      
+            fetchedOrders.forEach((el) => {
+              el.createdAt = new Date(el.createdAt.seconds * 1000).toLocaleString();
+            });
+      
+            setfetchedarray(fetchedOrders);
+          });
+      
+    }else{
+        let filteredOrders = fetchedarray.filter((el) =>el.uid == tokennum);
+
+        console.log(filteredOrders,"order")
+        setfetchedarray(filteredOrders);
     }
-    const filteredOrders = fetchedarray.filter((el) => el.uid === tokennum);
-    setfetchedarray(filteredOrders);
-  };
+
+  
+  }
 
   const toggleRow = (id) => {
     setOpenRows((prev) => ({ ...prev, [id]: !prev[id] }));

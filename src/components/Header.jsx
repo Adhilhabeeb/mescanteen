@@ -6,7 +6,7 @@ import { addDoc, collection, doc, query, serverTimestamp ,orderBy,limit,onSnapsh
 import { db } from "../Firebase";
 
 function Header({ bg, p }) {
-  let { user,admin,setshowhostelerprpage,showhostelerprpage ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setcashier,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,settoken} = useContext(ourcontext);
+  let { user,admin,setshowhostelerprpage,showhostelerprpage ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setcashier,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,settoken,loginpa,setloginpa} = useContext(ourcontext);
   const navigate = useNavigate();
   const [prevtok, setprevtok] = useState("")
  const [fetchedarray, setfetchedarray] = useState([])
@@ -58,7 +58,7 @@ const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
 
 
 
-return () => unsubscribe();
+return () =>{ unsubscribe()};
 
   }, [])
 
@@ -167,7 +167,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
           </>}
           </>
         )}
-            <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>
+         { !loginpa &&   <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>}
 
 
         {!admin&&  !cashier &&user && <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
@@ -253,7 +253,7 @@ sethoste(true)
             <>
               <button onClick={() => navigate("/cart")} className="btn bg-orange-500 w-full px-4 py-3">Cart</button>
               {/* <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 w-full px-4 py-3">Wishlist</button> */}
-              <button onClick={handleLogout} className="btn bg-red-500 w-full px-4 py-3">Logout</button>
+            {  !loginpa && <button onClick={handleLogout} className="btn bg-red-500 w-full px-4 py-3">Logout</button>}
             </>
           )}
 

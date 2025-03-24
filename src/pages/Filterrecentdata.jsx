@@ -186,7 +186,7 @@ const [nodata, setnodata] = useState(false)
     async function getyesterdayorder() {
       const today = new Date();
       const pastDate = new Date();
-      pastDate.setDate(today.getDate() - 1); // Get the date 7 days ago
+      pastDate.setDate(today.getDate() - 2); // Get the date 7 days ago
   
       const startTimestamp = Timestamp.fromDate(pastDate);  // Convert JS Date to Firestore Timestamp
   
