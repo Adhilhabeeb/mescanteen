@@ -309,7 +309,7 @@ return prev=totalofflinepayment+totalonlinepayment
           <TableBody>
             {fetchedarray.map(order => {
 
-             
+            console.log(order,"jkbhnvbmksnvftgrwyt")
        
               let foods = JSON.parse(order.foods);
               const totalPrice = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
@@ -317,7 +317,7 @@ return prev=totalofflinepayment+totalonlinepayment
               return (
                 <React.Fragment key={order.id}>
                   <TableRow>
-                    <TableCell>{order.id}</TableCell>
+                    <TableCell>{order.uid}</TableCell>
                     <TableCell>{order.email}</TableCell>
                     <TableCell>{order.createdAt}</TableCell>
                     <TableCell>₹{totalPrice}</TableCell>
