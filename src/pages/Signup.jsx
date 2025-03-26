@@ -5,7 +5,7 @@ import { auth } from "../Firebase";
 import { ourcontext } from "../main";
 
 function Signup() {
-  let {user,setuser} =useContext(ourcontext)
+  let {user,setuser,setloginpa} =useContext(ourcontext)
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +73,10 @@ handleregister(e)
     }, 1000);
   };
 
+  useEffect(() => {
+   setloginpa(true)
+  }, [])
+  
   return (
     <div className="p-10 max-w-md mx-auto bg-white rounded shadow-md">
       <h2 className="text-xl font-bold mb-4 text-center">Signup</h2>
