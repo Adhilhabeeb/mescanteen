@@ -16,8 +16,13 @@ import newStyled from "@emotion/styled";
 function Admin() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [hostelerpenarr, sethostelerpenarr] = useState([])
 
-
+  useEffect(() => {
+   console.log(hostelerpenarr,"hostelerpenarrupdated")
+  }, [hostelerpenarr])
+  
+  let amopuint=0
   let navigate=useNavigate()
     let {user,setuser,sethstelusertotalbill,hstelusertotalbill}=useContext(ourcontext)
   useEffect(() => {
@@ -106,10 +111,12 @@ function Admin() {
       collection(db, "canteen"),
       orderBy("createdAt", "desc")
     );
+
   
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
       const fetchedMessages = [];
       let newTotal = 0; // Recalculate from scratch
+      let hosteluserrsoendingarray= []
   
       QuerySnapshot.forEach((doc) => {
         const orderData = { ...doc.data(), id: doc.id };
@@ -124,27 +131,67 @@ function Admin() {
   
         // Only consider hostel users & orders that are NOT done
         if (order.hosteluser && !order.done) {
-          let foods = JSON.parse(order.foods);
-          let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
-          newTotal += orderTotal; // Add to total
-         
+          // let foods = JSON.parse(order.foods);
+          // let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+          // newTotal += orderTotal; // Add to total
+        //  console.log(order,"orderrhosteler")
         }
       });
 
       sortedMessages.forEach(order => {
-
+  
         if (order.hosteluser && !order.done) {
+           let foods = JSON.parse(order.foods);
+          let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+// sethosteluserrsoendingarray(prev=>{
 
-          // alert("hhhh")
+//  let checkhostelerexist=prev.some(el=>el.email===order.email)
+// if (checkhostelerexist) {
+// console.log("exist",order.email)
+// return
+// }
+
+// return [...prev,{email:order.email,monthlyamnt:orderTotal}]
+
+// })
+let checkhostelerexist=hosteluserrsoendingarray.some(el=>el.email===order.email)
+
+if (checkhostelerexist) {
+hosteluserrsoendingarray.forEach(el=>{
+if (el.email==order.email) {
+  
+  el.monthlyamnt+=orderTotal
+
+}
+})
+
+  
+}   else{
+  
+console.log(order.email,"nboteixts",orderTotal)
+
+ hosteluserrsoendingarray.push({email:order.email,monthlyamnt:orderTotal})
+
+}   
+
+console.log(hosteluserrsoendingarray,"hosteluserrsoendingarray")
+sethostelerpenarr(hosteluserrsoendingarray)
+// console.log(order.email,"order.email")
+let filterhostuser=hosteluserrsoendingarray.filter(el=>el.email===order.email)
+amopuint=filterhostuser[0].monthlyamnt
+console.log("filkterrrrerwtwrtwrtgrw",filterhostuser[0].monthlyamnt,"oooooo",amopuint)
+// order.monthlyamnt=filterhostuser[0].monthlyamnt
+
         }
       })
 
   // alert(newTotal)
-      sethstelusertotalbill(newTotal); // Set the correct total
+      // sethstelusertotalbill(newTotal); // Set the correct total
       setfetchedarray(sortedMessages);
     });
   
     return () => {
+   
       unsubscribe();
     };
   }, []);
@@ -309,21 +356,44 @@ return prev=totalofflinepayment+totalonlinepayment
           <TableBody>
             {fetchedarray.map(order => {
 
-            console.log(order,"jkbhnvbmksnvftgrwyt")
-       
+          //  hosteluserrsoendingarray[0].email &&hosteluserrsoendingarray.forEach(el=>{
+
+
+            if (hostelerpenarr!=[]) {
+              hostelerpenarr.forEach(el=>{
+                if (el.email==order.email) {
+                  order.monthlyamnt=el.monthlyamnt
+                }
+              })
+              
+            }
+
+
+          //   console.log(el,"elllllllll087i9089475802475860248602746")
+          //  })  
+
               let foods = JSON.parse(order.foods);
               const totalPrice = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
 
               return (
                 <React.Fragment key={order.id}>
                   <TableRow>
-                    <TableCell>{order.uid}</TableCell>
+                    <TableCell>{order.id}</TableCell>
                     <TableCell>{order.email}</TableCell>
                     <TableCell>{order.createdAt}</TableCell>
                     <TableCell>₹{totalPrice}</TableCell>
                     <TableCell>{order.paymenttype}</TableCell>
                     <TableCell>
-{order.hosteluser && hstelusertotalbill  &&<h1> crt pending {hstelusertotalbill}</h1>}
+{/* {order.hosteluser &&hosteluserrsoendingarray.length>0 && hosteluserrsoendingarray.map(el=>{
+
+  if (el.name==order.email) {
+alert(el.monthlyamnt)
+  }
+})} */}
+{order.hosteluser  &&   order.monthlyamnt && <Typography>Monthly Bill: ₹{order.monthlyamnt}</Typography>}
+
+
+
 </TableCell>
                     <TableCell>
                       <IconButton onClick={() => setExpanded(prev => ({ ...prev, [order.id]: !prev[order.id] }))}>

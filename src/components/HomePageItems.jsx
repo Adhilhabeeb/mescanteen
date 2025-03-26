@@ -4,7 +4,7 @@ import BreakfastItems from "./HomePageContents/BreakfastItems";
 import { collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { ourcontext } from "../main";
-import { Typography,Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 
 function HomePageItems() {

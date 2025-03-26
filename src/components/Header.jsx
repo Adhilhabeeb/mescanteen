@@ -8,6 +8,7 @@ import { db } from "../Firebase";
 function Header({ bg, p }) {
   let { user,admin,setshowhostelerprpage,showhostelerprpage ,sethoste,hoste,hosteluser,setopenmenuadd,openmenuadd,setshowdeclareditem,showdeclareditem,cashier,setcashier,setshowfilterorderhis,showfilterorderhis,setadmnodrhstryshow,admnodrhstryshow,settoken,loginpa,setloginpa} = useContext(ourcontext);
   const navigate = useNavigate();
+  const [usernotfound, setusernotfound] = useState(false)
   const [prevtok, setprevtok] = useState("")
  const [fetchedarray, setfetchedarray] = useState([])
  const [showprevtoken, setshowprevtoken] = useState(false)
@@ -54,8 +55,9 @@ const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
 
 
 
-
-
+if (!localStorage.getItem("auth")) {
+setusernotfound(true)
+}
 
 
 return () =>{ unsubscribe()};
@@ -167,7 +169,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
           </>}
           </>
         )}
-         { !loginpa &&   <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>}
+         { !loginpa &&!usernotfound &&   <button onClick={handleLogout} className="btn bg-red-500 px-4 py-2">Logout</button>}
 
 
         {!admin&&  !cashier &&user && <button onClick={() => navigate("/history")} className="btn bg-orange-500 px-4 py-2">History</button>
@@ -253,7 +255,7 @@ sethoste(true)
             <>
               <button onClick={() => navigate("/cart")} className="btn bg-orange-500 w-full px-4 py-3">Cart</button>
               {/* <button onClick={() => navigate("/wishlist")} className="btn bg-blue-500 w-full px-4 py-3">Wishlist</button> */}
-            {  !loginpa && <button onClick={handleLogout} className="btn bg-red-500 w-full px-4 py-3">Logout</button>}
+            {/* {  !loginpa &&  !usernotfound &&<button onClick={handleLogout} className="btn bg-red-500 w-full px-4 py-3">Logout</button>} */}
             </>
           )}
 

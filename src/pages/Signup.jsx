@@ -1,6 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../Firebase";
 import { ourcontext } from "../main";
 
@@ -104,6 +104,9 @@ handleregister(e)
           {loading ? "Signing up..." : "Signup"}
         </button>
       </form>
+    <Link to="/login" className="text-blue-500 mt-3 block text-center">
+        Already have an account? Login
+      </Link>
     </div>
   );
 }
