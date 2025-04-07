@@ -1,5 +1,6 @@
 import { 
-  collection, limit, onSnapshot, orderBy, query, doc, updateDoc , where, getDocs
+  collection, limit, onSnapshot, orderBy, query, doc, updateDoc , where, getDocs,
+  Timestamp
 } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { db } from "./Firebase";
@@ -190,6 +191,11 @@ console.log("filkterrrrerwtwrtwrtgrw",filterhostuser[0].monthlyamnt,"oooooo",amo
       setfetchedarray(sortedMessages);
     });
   
+
+
+
+
+    
     return () => {
    
       unsubscribe();
@@ -204,7 +210,7 @@ console.log("filkterrrrerwtwrtwrtgrw",filterhostuser[0].monthlyamnt,"oooooo",amo
     let offlinepay = 0;
 
     fetchedarray.forEach(order => {
-
+console.log(order,"order")
      
       let foods = JSON.parse(order.foods);
       let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
@@ -259,6 +265,74 @@ return prev=totalofflinepayment+totalonlinepayment
     }
   };
 
+
+  let newTotal = 0;
+  let onlinepay = 0;
+  let offlinepay = 0;
+  let odr=[]
+  async function getTodayOrders() {
+    const today = new Date();
+    
+    // Set start of the day (00:00:00)
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const startTimestamp = Timestamp.fromDate(startOfDay);
+  
+    // Set end of the day (23:59:59)
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+    const endTimestamp = Timestamp.fromDate(endOfDay);
+  
+    const q = query(
+      collection(db, "canteen"),
+      where("createdAt", ">=", startTimestamp),
+      where("createdAt", "<=", endTimestamp),
+      orderBy("createdAt", "desc") // Newest first
+    );
+  
+    const querySnapshot = await getDocs(q);
+    let orders = [];
+    querySnapshot.forEach((doc) => {
+      orders.push({ id: doc.id, ...doc.data() });
+    });
+  
+    console.log(orders,"today orders")
+  
+  
+  
+  orders.forEach(order => {
+  
+  
+   
+    let foods = JSON.parse(order.foods);
+  
+  
+    let orderTotal = foods.reduce((sum, food) => sum + food.price * food.quantity, 0);
+  
+  
+    newTotal += orderTotal;
+  if (order.done) {
+  if (order.paymenttype === "online") {
+  onlinepay += orderTotal;
+  
+  console.log(onlinepay,"onl")
+  } else {
+  offlinepay += orderTotal;
+  console.log(offlinepay,"off")
+  }
+  }
+   
+  });
+  
+  
+  console.log(totalonlinepayment,"onl","off",totalofflinepayment,)
+  
+  settotalonlinepayment(onlinepay);
+  settotalofflinepayment(offlinepay);
+    return orders;
+  }
+  
+
+  
+
   const fetchOrders = async () => {
    
     if (!fromDate || !toDate) {
@@ -305,6 +379,9 @@ return prev=totalofflinepayment+totalonlinepayment
        
       });
   
+
+
+      console.log(onlinepay,"onl","off",offlinepay,)
     
       settotalonlinepayment(onlinepay);
       settotalofflinepayment(offlinepay);
@@ -334,6 +411,8 @@ return prev=totalofflinepayment+totalonlinepayment
         }}
       />
        <button className="btn bg-blue-500  py-2 px-2" onClick={fetchOrders}> Filter Date wise </button>
+       <button className="btn bg-blue-500  py-2 px-2" onClick={  getTodayOrders}> get today amount </button>
+
           <Typography variant="p">Money Received: ₹{totalbudgey}</Typography>
           <Typography variant="p">Online Payment Received: ₹{totalonlinepayment}</Typography>
           <Typography variant="p">Offline Payment Received: ₹{totalofflinepayment}</Typography>
@@ -444,3 +523,8 @@ alert(el.monthlyamnt)
 }
 
 export default Admin;
+
+
+
+
+
