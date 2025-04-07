@@ -103,6 +103,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
   const handleLogout = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("users");
+    localStorage.removeItem("prevtoken")
     navigate("/login");
     window.location.reload();
   };
