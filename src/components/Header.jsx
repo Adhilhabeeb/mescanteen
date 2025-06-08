@@ -116,7 +116,7 @@ const [addmenuopen, setaddmenuopen] = useState(false)
   return (
     <header  className={`flex items-center justify-between ${bg || "bg-transparent"} sm:px-[0%] ${p || "p-6"}`}>
       <h1 className="text-white font-extrabold text-3xl sm:text-5xl italic font-serif py-1 sm:p-2">
-        Cafetech
+       MesCafe 
       </h1>
 
       {/* User Info */}
